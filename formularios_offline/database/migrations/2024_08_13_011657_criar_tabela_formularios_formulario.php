@@ -12,8 +12,8 @@ class CriarTabelaFormulariosFormulario extends Migration
             $table->increments('id');
             $table->string('nome_formulario', 100)->nullable(false);
             $table->text('descricao_formulario')->nullable();
-            $table->integer('usuario_id')->unsigned()->nullable(false);
-            $table->foreign('usuario_id')->references('id')->on('usuarios');
+            $table->integer('professor_id')->unsigned()->nullable(false);
+            $table->foreign('professor_id')->references('id')->on('usuarios');
             $table->timestamps();
             $table->softDeletes();
         });

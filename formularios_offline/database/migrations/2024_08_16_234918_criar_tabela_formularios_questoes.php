@@ -4,13 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CriarTabelaFormulariosPerguntas extends Migration
+class CriarTabelaFormulariosQuestoes extends Migration
 {
     public function up()
     {
-        Schema::create('formularios_perguntas', function (Blueprint $table) {
+        Schema::create('formularios_questoes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('pergunta')->nullable(false);
+            $table->text('questao')->nullable(false);
             $table->enum('tipo', [
                 'TEXTO',
                 'MULTIPLA_ESCOLHA',
@@ -24,6 +24,6 @@ class CriarTabelaFormulariosPerguntas extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('formularios_perguntas');
+        Schema::dropIfExists('formularios_questoes');
     }
 }
