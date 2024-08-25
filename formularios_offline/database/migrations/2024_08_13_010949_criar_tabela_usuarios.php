@@ -18,7 +18,8 @@ class CriarTabelaUsuarios extends Migration
 
             $table->enum('tipo', [
                 'PROFESSOR',
-                'ALUNO'
+                'ALUNO',
+                'ADMIN',
             ])->default('ALUNO');
 
             $table->rememberToken();
