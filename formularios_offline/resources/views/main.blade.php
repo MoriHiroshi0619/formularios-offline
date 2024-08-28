@@ -9,32 +9,64 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- bootstrap --}}
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    {{-- jquery --}}
+    <script src="{{ mix('js/app.js') }}"></script>
     @stack('styles')
 </head>
 <body>
-    <div class="container">
-        @if( auth()->user() )
-            <div class="row pt-4">
-                <div class="col-md-12">
-                    {{ auth()->user()->nome }} | <a href="{{ route('login.logout') }}">Sair</a>
+    {{--header--}}
+    <header class="sticky-top">
+        <nav class="navbar bg-light navbar-expand-sm">
+            <div class="container">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    @if( auth()->check() )
+                        <div>
+                            <a href="{{route('home.index')}}" class="navbar-brand">
+                                <b>{{ auth()->user()->nome }}</b>
+                            </a>
+                        </div>
+                        <form action="{{ route('login.logout') }}" method="POST" class="me-2">
+                            @csrf
+                            <input type="submit" class="btn btn-outline-danger" value="Sair">
+                        </form>
+                    @else
+                        <div>
+                            <a href="#" class="navbar-brand">
+                                Formulários Offline
+                            </a>
+                        </div>
+                   @endif
                 </div>
             </div>
-        @endif
+        </nav>
+    </header>
+
+    <main class="container">
         <div class="row pt-4">
             <div class="col-md-12">
+                {{--mensagem padrão em todas paginas--}}
                 @if( session()->has('success') )
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success alerta" role="alert">
                         {{ session()->get('success') }}
                     </div>
                 @elseif( session()->has('error') )
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger alerta" role="alert">
                         {{ session()->get('error') }}
                     </div>
                 @endif
             </div>
         </div>
+        {{--conteudo de cada pagina--}}
         @yield('content')
-    </div>
+    </main>
     @stack('scripts')
+    <script type="application/javascript">
+        //sumir com o alerta depois de um tempo
+        $(document).ready(()=>{
+            setTimeout(()=>{
+                $('.alerta').fadeOut('slow');
+            }, 3000);
+        })
+    </script>
 </body>
 </html>
