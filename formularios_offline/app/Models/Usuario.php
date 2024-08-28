@@ -15,7 +15,7 @@ class Usuario extends Authenticatable
         'nome',
         'sobre_nome',
         'email',
-        'senha',
+        'password',
         'cpf',
         'tipo'
     ];
@@ -23,4 +23,10 @@ class Usuario extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+
 }
