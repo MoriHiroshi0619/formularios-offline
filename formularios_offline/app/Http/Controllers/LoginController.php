@@ -23,7 +23,7 @@ class LoginController extends Controller
                 throw new \Exception('Preencha todos os campos');
             }
             $credentials = [
-                'cpf' => Str::replace(['.', '-'], '', $request->input('login.cpf')),
+                'cpf' => string()->replace(['.', '-'], '', $request->input('login.cpf')),
                 'password' => $request->input('login.senha'),
             ];
             if (auth()->attempt($credentials, true)) {

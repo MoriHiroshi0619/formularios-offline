@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
@@ -21,7 +20,6 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         try {
-            throw new \Exception('Preencha todos os campos');
             if($request->input('aluno') == null){
                 throw new \Exception('Preencha todos os campos');
             }
@@ -30,9 +28,6 @@ class UsuarioController extends Controller
             }
             $novoUsuario = new Usuario();
             $novoUsuario->fill($request->input('aluno'));
-            $novoUsuario->cpf = Str::replace(['.', '-'], '', $novoUsuario->cpf);
-            $novoUsuario->nome = Str::title($novoUsuario->nome);
-            $novoUsuario->sobre_nome = Str::title($novoUsuario->sobre_nome);
             $novoUsuario->tipo = 'ALUNO';
             $novoUsuario->save();
             return redirect()->route('login.index')->with('success', 'Usuário criado com sucesso');

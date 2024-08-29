@@ -61,7 +61,10 @@
         </div>
         <div class="row justify-content-end">
             <div class="col-sm-2 pt-4">
-                <button type="submit" class="btn btn-primary">Criar conta</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i>
+                    Criar conta
+                </button>
             </div>
         </div>
     </form>

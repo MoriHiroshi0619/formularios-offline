@@ -29,13 +29,17 @@
                 <div class="d-flex w-100 justify-content-between align-items-center">
                     @if( auth()->check() )
                         <div>
-                            <a href="{{route('home.index')}}" class="navbar-brand">
+                            <a href="{{route('home.index')}}" class="navbar-brand fs-3">
                                 <b>{{ auth()->user()->nome }}</b>
                             </a>
                         </div>
                         <form action="{{ route('login.logout') }}" method="POST" class="me-2">
                             @csrf
-                            <input type="submit" class="btn btn-outline-danger" value="Sair">
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="bi bi-box-arrow-in-left"></i>
+                                Sair
+                            </button>
+
                         </form>
                     @else
                         <div>

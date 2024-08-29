@@ -28,4 +28,19 @@ class Usuario extends Authenticatable
         $this->attributes['password'] = bcrypt($password);
     }
 
+    public function setNomeAttribute($nome)
+    {
+        $this->attributes['nome'] = string()->title($nome);
+    }
+
+    public function setSobreNomeAttribute($sobrenome)
+    {
+        $this->attributes['sobre_nome'] = string()->title($sobrenome);
+    }
+
+    public function setCpfAttribute($cpf)
+    {
+        $this->attributes['cpf'] = string()->replace(['.', '-'], '', $cpf);
+    }
+
 }
