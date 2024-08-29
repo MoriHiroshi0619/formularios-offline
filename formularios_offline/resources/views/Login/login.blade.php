@@ -15,11 +15,22 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <label class="form-label" for="cpf">CPF</label>
-                        <input type="text" name="login[cpf]" id="cpf" class="form-control">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+                            <input type="text" name="login[cpf]" id="cpf" class="form-control cpf">
+                        </div>
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label" for="senha">Senha</label>
-                        <input type="password" name="login[senha]" id="senha" class="form-control">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input type="password" name="login[senha]" id="senha" class="form-control" aria-describedby="basic-addon1">
+                            <span class="input-group-text maozinha" data-action="alterar-senha-visibilidade">
+                                <i class="bi bi-eye-slash"></i>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,13 +50,16 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(()=>{
-            $('#cpf').on('input', (e) => {
-                let valor = $(e.target).val().replace(/\D/g, '');
-                if (valor.length > 11) valor = valor.slice(0, 11);
-                let formato = valor.replace(/(\d{3})(\d)/, '$1.$2');
-                formato = formato.replace(/(\d{3})(\d)/, '$1.$2');
-                formato = formato.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                $(e.target).val(formato);
+            $('[data-action="alterar-senha-visibilidade"]').on('click', (e)=> {
+                let inputSenha = $('#senha');
+                let icone = $(e.currentTarget).find('i');
+                if( inputSenha.attr('type') === 'password' ){
+                    inputSenha.attr('type', 'text');
+                    icone.removeClass('bi-eye-slash').addClass('bi bi-eye-fill');
+                }else{
+                    inputSenha.attr('type', 'password');
+                    icone.removeClass('bi bi-eye-fill').addClass('bi-eye-slash');
+                }
             });
         });
     </script>

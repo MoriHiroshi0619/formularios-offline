@@ -18,15 +18,14 @@ class createAdminUser extends Command
     {
         $usuario = new \App\Models\Usuario();
         $usuario->fill([
-            'nome' => 'admin',
-            'sobre_nome' => 'admin',
-            'email' => 'admin@gmail.com',
+            'nome' => 'Admin',
+            'sobre_nome' => 'Admin',
             'cpf' => '12345678901',
             'tipo' => 'ADMIN',
-            'password' => bcrypt('admin'),
+            'password' => 'admin',
         ]);
-        $usuario->save();
-        $this->info('Admin user created successfully!');
+        $this->info('Admin
+        $usuario->save(); user created successfully!');
         return 0;
     }
 }

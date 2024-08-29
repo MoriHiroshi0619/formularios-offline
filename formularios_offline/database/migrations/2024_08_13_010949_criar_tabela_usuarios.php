@@ -12,7 +12,6 @@ class CriarTabelaUsuarios extends Migration
             $table->increments('id');
             $table->string('nome', 30);
             $table->string('sobre_nome', 30);
-            $table->string('email', 100)->unique();
             $table->string('cpf', 11)->unique()->nullable(false);
             $table->string('password');
 
