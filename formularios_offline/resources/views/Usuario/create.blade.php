@@ -31,19 +31,18 @@
             <div class="col-sm-6 px-3 py-2">
                 <div class="form-group">
                     <label for="cpf">CPF</label>
-                    <input type="text" name="aluno[cpf]" class="form-control" id="cpf" placeholder="seu CPF" required>
-                </div>
-            </div>
-            <div class="col-sm-6 px-3 py-2">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="aluno[email]" class="form-control" id="email" placeholder="seu email" required>
+                    <input type="text" name="aluno[cpf]" class="form-control cpf" id="cpf" placeholder="seu CPF" required>
                 </div>
             </div>
             <div class="col-sm-6 px-3 py-2">
                 <div class="form-group">
                     <label for="senha">Senha</label>
-                    <input type="password" name="aluno[password]" class="form-control" id="senha" placeholder="Sua senha" required>
+                    <div class="input-group">
+                        <input type="password" name="aluno[password]" class="form-control" id="senha" placeholder="Sua senha" required>
+                        <span class="input-group-text maozinha" data-action="alterar-senha-visibilidade">
+                            <i class="bi bi-eye-slash"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-6 px-3 py-2">
@@ -51,7 +50,12 @@
                     <label for="senha2">Confirmar senha</label>
                     <br>
                     <small id="senha2" class="form-text text-muted">Digite a mesma senha anterior para confirmar</small>
-                    <input type="password" name="aluno[password2]" class="form-control" id="senha2" placeholder="Confirme sua senha" required>
+                    <div class="input-group">
+                        <input type="password" name="aluno[password2]" class="form-control" id="senha2" placeholder="Confirme sua senha" required>
+                        <span class="input-group-text maozinha" data-action="alterar-senha-visibilidade">
+                            <i class="bi bi-eye-slash"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,13 +70,16 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(()=>{
-            $('#cpf').on('input', (e) => {
-                let valor = $(e.target).val().replace(/\D/g, '');
-                if (valor.length > 11) valor = valor.slice(0, 11);
-                let formato = valor.replace(/(\d{3})(\d)/, '$1.$2');
-                formato = formato.replace(/(\d{3})(\d)/, '$1.$2');
-                formato = formato.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                $(e.target).val(formato);
+            $('[data-action="alterar-senha-visibilidade"]').on('click', (e)=> {
+                let inputSenha = $(e.currentTarget).closest('.input-group').find('input');
+                let icone = $(e.currentTarget).find('i');
+                if( inputSenha.attr('type') === 'password' ){
+                    inputSenha.attr('type', 'text');
+                    icone.removeClass('bi-eye-slash').addClass('bi bi-eye-fill');
+                }else{
+                    inputSenha.attr('type', 'password');
+                    icone.removeClass('bi bi-eye-fill').addClass('bi-eye-slash');
+                }
             });
         });
     </script>

@@ -8,15 +8,23 @@
     <title>Formulários Offline</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- bootstrap --}}
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    {{-- css global --}}
+    <link href="{{ mix('css/projeto.css') }}" rel="stylesheet">
+    <!-- fontes -->
+    <link href="{{ mix('css/fonts.css') }}" rel="stylesheet">
     {{-- jquery --}}
     <script src="{{ mix('js/app.js') }}"></script>
+    {{-- funcoes globais --}}
+    <script src="{{ mix('js/functions.js') }}"></script>
+
     @stack('styles')
+
 </head>
 <body>
     {{--header--}}
     <header class="sticky-top">
-        <nav class="navbar bg-light navbar-expand-sm">
+        <nav class="navbar bg-light navbar-expand-sm py-3">
             <div class="container">
                 <div class="d-flex w-100 justify-content-between align-items-center">
                     @if( auth()->check() )
@@ -46,12 +54,14 @@
             <div class="col-md-12">
                 {{--mensagem padrão em todas paginas--}}
                 @if( session()->has('success') )
-                    <div class="alert alert-success alerta" role="alert">
+                    <div class="alert alert-success" id="alert-ban-sucesso" role="alert">
                         {{ session()->get('success') }}
                     </div>
                 @elseif( session()->has('error') )
-                    <div class="alert alert-danger alerta" role="alert">
-                        {{ session()->get('error') }}
+                    <div class="alert alert-danger" id="alert-ban-erro" role="alert">
+                        <div class="d-flex align-items-center justify-content-between">
+                            {{ session()->get('error') }} <i class="bi bi-x-square maozinha" data-action="remover-alert"></i>
+                        </div>
                     </div>
                 @endif
             </div>
@@ -61,10 +71,13 @@
     </main>
     @stack('scripts')
     <script type="application/javascript">
-        //sumir com o alerta depois de um tempo
         $(document).ready(()=>{
+            $('[data-action="remover-alert"]').on('click', ()=>{
+                $('#alert-ban-erro').fadeOut('slow');
+            });
+
             setTimeout(()=>{
-                $('.alerta').fadeOut('slow');
+                $('#alert-ban-sucesso').fadeOut('slow');
             }, 3000);
         })
     </script>
