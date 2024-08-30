@@ -21,4 +21,8 @@ Route::prefix('login')->name('login.')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
     Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class)->except('create', 'store');
+
+    Route::resource('formulario', \App\Http\Controllers\FormularioController::class);
+
+
 });

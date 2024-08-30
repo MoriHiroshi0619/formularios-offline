@@ -10,7 +10,7 @@
 
     <div class="row pt-2">
         <div class="col-md-12">
-            <h1>Cadastrar Aluno</h1>
+            <h2>Cadastrar Aluno</h2>
         </div>
     </div>
     <form action="{{ route('usuarios.store') }}" method="POST" class="pt-3">

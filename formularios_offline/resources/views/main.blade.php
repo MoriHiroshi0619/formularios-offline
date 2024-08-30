@@ -24,18 +24,18 @@
 <body>
     {{--header--}}
     <header class="sticky-top">
-        <nav class="navbar bg-light navbar-expand-sm py-3">
+        <nav class="navbar navbar-expand-sm py-3">
             <div class="container">
                 <div class="d-flex w-100 justify-content-between align-items-center">
                     @if( auth()->check() )
                         <div>
-                            <a href="{{route('home.index')}}" class="navbar-brand fs-3">
-                                <b>{{ auth()->user()->nome }}</b>
+                            <a href="{{route('home.index')}}" class="navbar-brand fs-3 titulo">
+                                {{ auth()->user()->nome }}
                             </a>
                         </div>
                         <form action="{{ route('login.logout') }}" method="POST" class="me-2">
                             @csrf
-                            <button type="submit" class="btn btn-outline-danger">
+                            <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-box-arrow-in-left"></i>
                                 Sair
                             </button>
@@ -43,7 +43,7 @@
                         </form>
                     @else
                         <div>
-                            <a href="#" class="navbar-brand">
+                            <a href="#" class="navbar-brand fs-3 titulo">
                                 Formulários Offline
                             </a>
                         </div>

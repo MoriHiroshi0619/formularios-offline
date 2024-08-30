@@ -1,8 +1,81 @@
-h1, h2, h3, h4, h5, p, a, label {
+body {
+  background-color: #FFF9E8;
+}
+
+header {
+  background-color: #2291F1;
+}
+
+p, span {
   color: #171515;
   font-family: "Roboto", sans-serif;
+  padding: 4px 0;
+}
+
+h1, h2, h3, h4, h5 {
+  color: #3d3a3a;
+  font-family: "Roboto", sans-serif;
+  padding: 4px 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+label {
+  font-weight: bolder;
+  padding-top: 4px;
 }
 
 .maozinha {
   cursor: pointer;
+}
+
+.animate-on-hover {
+  display: block;
+  transition: transform 0.3s ease-in-out;
+}
+@media (min-width: 150px) {
+  .animate-on-hover:hover {
+    transform: scale(1.01);
+  }
+}
+@media (max-width: 150px) {
+  .animate-on-hover:hover {
+    transform: scale(1.05);
+  }
+}
+.animate-on-hover .card {
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+.animate-on-hover .card:hover {
+  transform: scale(1.05);
+}
+
+a.animate-on-hover {
+  margin: 0;
+}
+
+.titulo {
+  color: #FFF9E8;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+  text-decoration: none;
+  transition: none;
+}
+.titulo a {
+  text-decoration: none;
+  color: #FFF9E8;
+  transition: none;
+}
+.titulo:hover {
+  color: #FFF9E8;
+  text-decoration: none;
+}
+
+.alert {
+  margin-top: 15px;
 }

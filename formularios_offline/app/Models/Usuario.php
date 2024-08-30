@@ -43,4 +43,13 @@ class Usuario extends Authenticatable
         $this->attributes['cpf'] = string()->replace(['.', '-'], '', $cpf);
     }
 
+    public function ehAluno(): bool
+    {
+        if($this->tipo === 'ALUNO'){
+            return true;
+        }
+
+        return false;
+    }
+
 }

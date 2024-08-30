@@ -1,8 +1,97 @@
-h1, h2, h3, h4, h5, p, a, label{
-    color: #171515;
-    font-family: 'Roboto', sans-serif;
+$animation-duration: 0.3s;
+$large-scale-threshold: 150px; // Largura para aplicar a escala condicional
+$fundo-1: #FFF9E8;
+$fundo-2: #2291F1;
+$preto-1: #3d3a3a;
+$preto-2: #171515;
+$sombra: 2px 2px 6px rgba(0, 0, 0, 0.3);
+
+body{
+    background-color: $fundo-1;
 }
 
-.maozinha{
+header{
+    background-color: $fundo-2;
+}
+
+p, span{
+    color: $preto-2;
+    font-family: 'Roboto', sans-serif;
+    padding: 4px 0;
+}
+
+h1, h2, h3, h4, h5{
+    color: $preto-1;
+    font-family: 'Roboto', sans-serif;
+    padding: 4px 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+label{
+    font-weight: bolder;
+    padding-top: 4px;
+}
+
+.maozinha {
     cursor: pointer;
 }
+
+.animate-on-hover {
+    display: block;
+    transition: transform $animation-duration ease-in-out;
+
+    @media (min-width: $large-scale-threshold) {
+        &:hover {
+            transform: scale(1.01);
+        }
+    }
+
+    @media (max-width: $large-scale-threshold) {
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    // Remove o efeito de botão padrão do Bootstrap
+    .card {
+        transition: transform $animation-duration ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.05); // Ajusta a escala ao passar o mouse
+        }
+    }
+}
+
+a.animate-on-hover {
+    margin: 0;
+}
+
+.titulo {
+    color: $fundo-1;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: $sombra;
+    display: inline-block;
+    text-decoration: none;
+    transition: none;
+
+    a {
+        text-decoration: none;
+        color: $fundo-1;
+        transition: none;
+    }
+
+    &:hover {
+        color: $fundo-1;
+        text-decoration: none;
+    }
+}
+
+.alert{
+    margin-top: 15px;
+}
+
