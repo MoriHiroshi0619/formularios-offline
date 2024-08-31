@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class createCustomAdmin extends Command
 {
-    protected $signature = 'admin:custom';
+    protected $signature = 'user:admin-custom';
     protected $description = 'Create a new admin user in iterative mode';
 
     public function __construct()

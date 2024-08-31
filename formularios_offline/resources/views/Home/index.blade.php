@@ -8,4 +8,13 @@
         </ol>
     </nav>
 
+    <br>
+    @if( auth()->user()->isAdmin() || auth()->user()->isProfessor() )
+        @include('Home.professor')
+    @endif
+    <br>
+    @if( auth()->user()->isAdmin() || auth()->user()->isAluno() )
+        @include('Home.aluno')
+    @endif
+
 @endsection

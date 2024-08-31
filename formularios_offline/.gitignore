@@ -16,3 +16,4 @@ yarn-error.log
 /package-lock.json
 /resources/.DS_Store
 /resources/fonts/.DS_Store
+public/img/.DS_Store

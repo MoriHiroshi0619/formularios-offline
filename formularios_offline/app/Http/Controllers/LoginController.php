@@ -3,27 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
 
     public function index()
     {
+        if (auth()->check()) {
+            return redirect()->route('home.index');
+        }
         return view('Login.login');
     }
 
     public function login(Request $request)
     {
         try {
-            if(auth()->user()){
+            if(auth()->check()){
                 return redirect()->route('home.index');
             }
             if($request->input('login.cpf') == null || $request->input('login.senha') == null){
                 throw new \Exception('Preencha todos os campos');
             }
             $credentials = [
-                'cpf' => Str::replace(['.', '-'], '', $request->input('login.cpf')),
+                'cpf' => string()->replace(['.', '-'], '', $request->input('login.cpf')),
                 'password' => $request->input('login.senha'),
             ];
             if (auth()->attempt($credentials, true)) {

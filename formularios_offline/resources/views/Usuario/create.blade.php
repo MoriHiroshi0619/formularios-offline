@@ -10,7 +10,7 @@
 
     <div class="row pt-2">
         <div class="col-md-12">
-            <h1>Cadastrar Aluno</h1>
+            <h2>Cadastrar Aluno</h2>
         </div>
     </div>
     <form action="{{ route('usuarios.store') }}" method="POST" class="pt-3">
@@ -31,7 +31,7 @@
             <div class="col-sm-6 px-3 py-2">
                 <div class="form-group">
                     <label for="cpf">CPF</label>
-                    <input type="text" name="aluno[cpf]" class="form-control cpf" id="cpf" placeholder="seu CPF" required>
+                    <input type="text" name="aluno[cpf]" class="form-control cpf" id="cpf" placeholder="seu CPF" required inputmode="numeric">
                 </div>
             </div>
             <div class="col-sm-6 px-3 py-2">
@@ -61,7 +61,10 @@
         </div>
         <div class="row justify-content-end">
             <div class="col-sm-2 pt-4">
-                <button type="submit" class="btn btn-primary">Criar conta</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i>
+                    Criar conta
+                </button>
             </div>
         </div>
     </form>
