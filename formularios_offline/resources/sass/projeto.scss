@@ -4,6 +4,10 @@ $fundo-1: #FFF9E8;
 $fundo-2: #2291F1;
 $preto-1: #3d3a3a;
 $preto-2: #171515;
+$alt-cor-1: #ED602D;
+$fonte-padrao: 'Roboto' , sans-serif;
+$fonte-segundaria: 'Roboto Slab', sans-serif;
+
 $sombra: 2px 2px 6px rgba(0, 0, 0, 0.3);
 
 body{
@@ -16,13 +20,13 @@ header{
 
 p, span{
     color: $preto-2;
-    font-family: 'Roboto', sans-serif;
+    font-family: $fonte-padrao;
     padding: 4px 0;
 }
 
 h1, h2, h3, h4, h5{
     color: $preto-1;
-    font-family: 'Roboto', sans-serif;
+    font-family: $fonte-padrao;
     padding: 4px 0;
 }
 
@@ -39,35 +43,64 @@ label{
     cursor: pointer;
 }
 
-.animate-on-hover {
-    display: block;
-    transition: transform $animation-duration ease-in-out;
+.projeto-card {
+    position: relative;
+    display: flex;
+    width: 100%;
+    aspect-ratio: 1 / 0.65;
+    border: 1px solid $fundo-2;
+    border-radius: 15px;
+    align-content: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 
-    @media (min-width: $large-scale-threshold) {
-        &:hover {
-            transform: scale(1.01);
-        }
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/img/formulario.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: brightness(95%);
+        z-index: 1;
     }
 
-    @media (max-width: $large-scale-threshold) {
-        &:hover {
-            transform: scale(1.05);
+    .card-conteudo {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .card-titulo span, .card-descricao span{
+            color: $alt-cor-1;
+            font-family: $fonte-segundaria;
+            text-shadow:
+                -1px -1px 0 $fundo-1,
+                1px -1px 0 $fundo-1,
+                -1px 1px 0 $fundo-1,
+                1px 1px 0 $fundo-1;
+        }
+
+        .card-titulo span{
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .card-descricao span{
+            font-size: 1.2rem;
+            font-weight: 400;
         }
     }
-
-    // Remove o efeito de botão padrão do Bootstrap
-    .card {
-        transition: transform $animation-duration ease-in-out;
-        cursor: pointer;
-
-        &:hover {
-            transform: scale(1.05); // Ajusta a escala ao passar o mouse
-        }
-    }
-}
-
-a.animate-on-hover {
-    margin: 0;
 }
 
 .titulo {
@@ -92,6 +125,15 @@ a.animate-on-hover {
 }
 
 .alert{
+    transition: transform $animation-duration ease-in-out;
     margin-top: 15px;
+
+    i{
+        transition: transform $animation-duration ease-in-out;
+    }
+    i:hover{
+        transform: scale(1.1);
+        color: $preto-1;
+    }
 }
 

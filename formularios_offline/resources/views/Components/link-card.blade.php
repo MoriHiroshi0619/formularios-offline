@@ -1,16 +1,26 @@
-<div class="card-body" style="padding-bottom: 20px">
-    <a class="animate-on-hover" href="{{ $link }}">
-        <div class="card btn btn-outline-primary">
-            <div class="card-body">
-                <h5 class="card-title">
-                    {{ $titulo }}
-                    <i class="{{ $icone }}"></i>
-                </h5>
-                <p class="card-text">
-                    {{ $descricao }}
-                </p>
-            </div>
+<div class="projeto-card" data-action="{{ $action }}">
+    <div class="card-conteudo">
+        <div class="card-titulo">
+            <span> {{ $titulo }}
+                <i class="{{ $icone }}"></i>
+            </span>
         </div>
-    </a>
+        <div class="card-descricao">
+            <span> {{ $descricao }} </span>
+        </div>
+    </div>
 </div>
-{{--<img src="{{ asset('img/formualrio.png') }}">--}}
+
+@push('scripts')
+    <script type="application/javascript">
+        $(document).ready(function(){
+            let url = '{{ $link }}';
+            let action = '{{ $action }}';
+            $('.projeto-card[data-action="'+action+'"]').on('click', () => {
+                $(location).attr('href', url);
+            })
+        });
+    </script>
+@endpush
+
+

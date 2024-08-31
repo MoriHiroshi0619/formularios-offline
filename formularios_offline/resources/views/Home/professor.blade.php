@@ -13,7 +13,8 @@
                     'titulo' => 'Formulários',
                     'icone' => 'bi bi-receipt',
                     'link' => route('formulario.index'),
-                    'descricao' => 'Crie e gerencie seus formulários'
+                    'descricao' => 'Crie e gerêncie seus formulários',
+                    'action' => 'formularios'
                 ])
 
             </div>

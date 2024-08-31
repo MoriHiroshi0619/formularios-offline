@@ -31,30 +31,55 @@ label {
   cursor: pointer;
 }
 
-.animate-on-hover {
-  display: block;
-  transition: transform 0.3s ease-in-out;
-}
-@media (min-width: 150px) {
-  .animate-on-hover:hover {
-    transform: scale(1.01);
-  }
-}
-@media (max-width: 150px) {
-  .animate-on-hover:hover {
-    transform: scale(1.05);
-  }
-}
-.animate-on-hover .card {
-  transition: transform 0.3s ease-in-out;
+.projeto-card {
+  position: relative;
+  display: flex;
+  width: 100%;
+  aspect-ratio: 1/0.65;
+  border: 1px solid #2291F1;
+  border-radius: 15px;
+  align-content: center;
+  justify-content: center;
   cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
-.animate-on-hover .card:hover {
-  transform: scale(1.05);
+.projeto-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/img/formulario.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(95%);
+  z-index: 1;
 }
-
-a.animate-on-hover {
-  margin: 0;
+.projeto-card .card-conteudo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.projeto-card .card-conteudo .card-titulo span, .projeto-card .card-conteudo .card-descricao span {
+  color: #ED602D;
+  font-family: "Roboto Slab", sans-serif;
+  text-shadow: -1px -1px 0 #FFF9E8, 1px -1px 0 #FFF9E8, -1px 1px 0 #FFF9E8, 1px 1px 0 #FFF9E8;
+}
+.projeto-card .card-conteudo .card-titulo span {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.projeto-card .card-conteudo .card-descricao span {
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
 .titulo {
@@ -77,5 +102,13 @@ a.animate-on-hover {
 }
 
 .alert {
+  transition: transform 0.3s ease-in-out;
   margin-top: 15px;
+}
+.alert i {
+  transition: transform 0.3s ease-in-out;
+}
+.alert i:hover {
+  transform: scale(1.1);
+  color: #3d3a3a;
 }
