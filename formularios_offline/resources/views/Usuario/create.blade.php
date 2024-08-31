@@ -31,7 +31,7 @@
             <div class="col-sm-6 px-3 py-2">
                 <div class="form-group">
                     <label for="cpf">CPF</label>
-                    <input type="text" name="aluno[cpf]" class="form-control cpf" id="cpf" placeholder="seu CPF" required>
+                    <input type="text" name="aluno[cpf]" class="form-control cpf" id="cpf" placeholder="seu CPF" required inputmode="numeric">
                 </div>
             </div>
             <div class="col-sm-6 px-3 py-2">

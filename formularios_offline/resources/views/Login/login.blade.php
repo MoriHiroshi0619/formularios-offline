@@ -25,7 +25,7 @@
                             <span class="input-group-text">
                                 <i class="bi bi-person"></i>
                             </span>
-                            <input type="text" name="login[cpf]" id="cpf" class="form-control cpf">
+                            <input type="text" name="login[cpf]" id="cpf" class="form-control cpf" inputmode="numeric">
                         </div>
                     </div>
                     <div class="col-sm-6">
