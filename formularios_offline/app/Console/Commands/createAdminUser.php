@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class createAdminUser extends Command
 {
-    protected $signature = 'admin:create';
+    protected $signature = 'user:admin';
     protected $description = 'Create a new default admin user';
 
     public function __construct()
@@ -24,8 +24,8 @@ class createAdminUser extends Command
             'tipo' => 'ADMIN',
             'password' => 'admin',
         ]);
-        $this->info('Admin
-        $usuario->save(); user created successfully!');
+        $usuario->save();
+        $this->info('Admin user created successfully!');
         return 0;
     }
 }

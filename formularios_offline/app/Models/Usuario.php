@@ -23,6 +23,16 @@ class Usuario extends Authenticatable
         'password',
     ];
 
+    const ALUNO = "ALUNO";
+    const PROFESSOR = "PROFESSOR";
+
+    const ADMIN = "ADMIN";
+    const TIPO = [
+        self::ALUNO,
+        self::PROFESSOR,
+        self::ADMIN
+    ];
+
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);
@@ -43,9 +53,27 @@ class Usuario extends Authenticatable
         $this->attributes['cpf'] = string()->replace(['.', '-'], '', $cpf);
     }
 
-    public function ehAluno(): bool
+    public function isAluno(): bool
     {
-        if($this->tipo === 'ALUNO'){
+        if($this->tipo === $this::ALUNO){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isProfessor():bool
+    {
+        if($this->tipo === $this::PROFESSOR){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isAdmin():bool
+    {
+        if($this->tipo === $this::ADMIN){
             return true;
         }
 

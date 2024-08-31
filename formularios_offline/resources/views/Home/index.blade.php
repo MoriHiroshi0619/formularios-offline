@@ -8,10 +8,11 @@
         </ol>
     </nav>
 
-    @if( auth()->user()->ehAluno() )
-        @include('Home.aluno')
-    @else
+    @if( auth()->user()->isAdmin() || auth()->user()->isProfessor() )
         @include('Home.professor')
+    @endif
+    @if( auth()->user()->isAdmin() || auth()->user()->isAluno() )
+        @include('Home.aluno')
     @endif
 
 @endsection

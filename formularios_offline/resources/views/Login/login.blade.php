@@ -1,3 +1,9 @@
+<?php
+    if(auth()->check()){
+        return redirect()->route('home.index');
+    }
+?>
+
 @extends('main')
 
 @section('content')

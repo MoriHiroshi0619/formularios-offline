@@ -32,6 +32,7 @@
                 </div>
             </div>
         @else
+            {{--paginação aqui--}}
             ainda não pensei nesse ponto
         @endif
     </div>
