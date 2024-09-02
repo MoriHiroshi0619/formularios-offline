@@ -13,7 +13,7 @@
     <link href="{{ mix('css/projeto.css') }}" rel="stylesheet">
     <!-- fontes -->
     <link href="{{ mix('css/fonts.css') }}" rel="stylesheet">
-    {{-- jquery --}}
+    {{-- jquery + js do bootstrap    --}}
     <script src="{{ mix('js/app.js') }}"></script>
     {{-- funcoes globais --}}
     <script src="{{ mix('js/functions.js') }}"></script>
@@ -29,13 +29,13 @@
                 <div class="d-flex w-100 justify-content-between align-items-center">
                     @if( auth()->check() )
                         <div>
-                            <a href="{{route('home.index')}}" class="navbar-brand fs-3 titulo">
+                            <a href="{{route('home.index')}}" class="navbar-brand fs-3 titulo" title="voltar para a home">
                                 {{ auth()->user()->nome }}
                             </a>
                         </div>
                         <form action="{{ route('login.logout') }}" method="POST" class="me-2">
                             @csrf
-                            <button type="submit" class="btn btn-danger">
+                            <button type="submit" class="btn btn-danger" title="Deslogar do sistema">
                                 <i class="bi bi-box-arrow-in-left"></i>
                                 Sair
                             </button>

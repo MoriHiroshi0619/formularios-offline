@@ -20,6 +20,6 @@ class FormularioController extends Controller
 
     public function store(Request $request)
     {
-
+        dd("teste", $request->all());
     }
 }
