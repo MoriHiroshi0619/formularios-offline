@@ -247,3 +247,12 @@ label{
     }
 }
 
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; // Suavizar o scroll em dispositivos touch
+}
+
+.table {
+    min-width: 100%;
+}

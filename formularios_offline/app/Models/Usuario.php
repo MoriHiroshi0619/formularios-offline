@@ -23,10 +23,10 @@ class Usuario extends Authenticatable
         'password',
     ];
 
-    const PROFESSOR = "PROFESSOR";
+    const string PROFESSOR = "PROFESSOR";
 
-    const ADMIN = "ADMIN";
-    const TIPO = [
+    const string ADMIN = "ADMIN";
+    const array TIPO = [
         self::PROFESSOR,
         self::ADMIN
     ];

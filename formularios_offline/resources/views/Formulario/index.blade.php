@@ -36,7 +36,7 @@
                 </div>
             </div>
         @else
-            <div class="col-md-12">
+            <div class="col-md-12 table-responsive-wrapper">
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -51,12 +51,12 @@
                     <tbody>
                     @foreach ($formularios as $formulario)
                         <tr>
-                            <td>{{ $formulario->id }}</td>
+                            <td class="text-center">{{ $formulario->id }}</td>
                             <td class="long-title">{{ $formulario->nome_formulario }}</td>
-                            <td>{{ $formulario->questoes->count() }}</td>
-                            <td>{{ $formulario->status }}</td>
-                            <td>{{ $formulario->created_at->format('d/m/Y H:i') }}</td>
-                            <td>
+                            <td class="text-center">{{ $formulario->questoes->count() }}</td>
+                            <td class="text-center">{{ $formulario->status }}</td>
+                            <td class="text-center">{{ $formulario->created_at->format('d/m/Y H:i') }}</td>
+                            <td class="text-center">
                                 <div class="d-flex gap-1 align-items-center justify-content-evenly flex-sm-wrap">
                                     <a href="{{ route('formulario.show', $formulario->id) }}" class="btn btn-primary btn-sm" title="Visualizar Formulario">
                                         <i class="bi bi-eye"></i>
@@ -96,5 +96,38 @@
             </div>
         @endif
     </div>
-
 @endsection
+
+@push('scripts')
+    <script type="application/javascript">
+        $(document).ready(() => {
+
+            $('[data-action="deletar-formulario"]').on('click', (e) => {
+                let id = $(e.target).closest('button').data('id');
+                Swal.fire({
+                    title: "Atenção!",
+                    text: "Deseja mesmo apagar o formulário?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    cancelButtonColor: "#a6a6a6",
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "Apagar!",
+                    reverseButtons: true
+                }).then( async (result, e) => {
+                    if (!result.isConfirmed) return;
+                    try{
+                        await axios.delete(`/formulario/${id}`);
+                        window.location.href = '{{ route('formulario.index') }}';
+                    }catch (e) {
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao apagar formulário',
+                            text: e.message
+                        })
+                    }
+                });
+            })
+
+        })
+    </script>
+@endpush

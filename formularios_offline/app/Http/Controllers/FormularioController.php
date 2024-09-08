@@ -59,12 +59,35 @@ class FormularioController extends Controller
         }
     }
 
-    public function show(Request $request, $formularioId)
+    public function show($formularioId)
     {
         $formulario = Formulario::query()
             ->where('id', $formularioId)
             ->with('questoes.opcoesMultiplasEscolhas')
             ->first();
         return view('Formulario.show', compact('formulario'));
+    }
+
+    public function destroy($formularioId)
+    {
+        try{
+            DB::beginTransaction();
+            MultiplaEscolha::query()
+                ->whereHas('questao', fn ($query) => $query->where('formulario_id', $formularioId))
+                ->delete();
+
+            FormularioQuestao::query()
+                ->where('formulario_id', $formularioId)
+                ->delete();
+
+            Formulario::query()->findOrFail($formularioId)->delete();
+            DB::commit();
+            session()->flash('success', 'Formulário excluído com sucesso!');
+            return response()->noContent();
+        }catch (\Exception $e){
+            dd($e->getMessage());
+            DB::rollBack();
+            return response()->json(['error' => 'Erro ao tentar excluir o formulário'], 500);
+        }
     }
 }

@@ -17,10 +17,10 @@ class Formulario extends Model
         'descricao_formulario',
     ];
 
-    const CRIADO = "CRIADO";
-    const LIBERADO = "LIBERADO";
-    const FINALIZADO = "FINALIZADO";
-    const STATUS = [
+    const string CRIADO = "CRIADO";
+    const string LIBERADO = "LIBERADO";
+    const string FINALIZADO = "FINALIZADO";
+    const array STATUS = [
         self::CRIADO,
         self::LIBERADO,
         self::FINALIZADO
@@ -34,11 +34,6 @@ class Formulario extends Model
     public function questoes()
     {
         return $this->hasMany(FormularioQuestao::class);
-    }
-
-    public function respostas()
-    {
-        return $this->hasMany(RespotaAluno::class);
     }
 
     public function isCriado()
