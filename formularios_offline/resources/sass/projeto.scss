@@ -44,6 +44,13 @@ label{
     cursor: pointer;
 }
 
+.long-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
 //site para conseguir mais ilustrações no estilo do projeto: https://storyset.com/illustration
 .projeto-card {
     position: relative;

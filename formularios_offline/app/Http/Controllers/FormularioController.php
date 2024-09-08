@@ -58,4 +58,13 @@ class FormularioController extends Controller
             return response()->json(['error' => 'Erro ao tentar salvar o formulário'], 500);
         }
     }
+
+    public function show(Request $request, $formularioId)
+    {
+        $formulario = Formulario::query()
+            ->where('id', $formularioId)
+            ->with('questoes.opcoesMultiplasEscolhas')
+            ->first();
+        return view('Formulario.show', compact('formulario'));
+    }
 }

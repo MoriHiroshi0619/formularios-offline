@@ -1,5 +1,5 @@
 @php
-    $formularios = \App\Models\Formularios\Formulario::all();
+    $formularios = \App\Models\Formularios\Formulario::query()->with('questoes')->orderBy('created_at')->paginate(10);
 @endphp
 
 @extends('main')
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
         @if( $formularios->isEmpty() )
             <div class="col-sm-12">
                 <div class="alert alert-warning" role="alert">
@@ -36,10 +36,65 @@
                 </div>
             </div>
         @else
-            {{--paginação aqui--}}
-            ainda não pensei nesse ponto
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Qtd. Questões</th>
+                        <th>Status</th>
+                        <th>Criado em</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($formularios as $formulario)
+                        <tr>
+                            <td>{{ $formulario->id }}</td>
+                            <td class="long-title">{{ $formulario->nome_formulario }}</td>
+                            <td>{{ $formulario->questoes->count() }}</td>
+                            <td>{{ $formulario->status }}</td>
+                            <td>{{ $formulario->created_at->format('d/m/Y H:i') }}</td>
+                            <td>
+                                <div class="d-flex gap-1 align-items-center justify-content-evenly flex-sm-wrap">
+                                    <a href="{{ route('formulario.show', $formulario->id) }}" class="btn btn-primary btn-sm" title="Visualizar Formulario">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm" data-action="deletar-formulario" data-id="{{ $formulario->id }}" title="Deletar Formulario">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+
+                <!-- Paginação -->
+                <nav class="float-end" aria-label="Navegação de página">
+                    <ul class="pagination">
+                        <li class="page-item {{ $formularios->onFirstPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $formularios->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $formularios->onFirstPage() ? 'true' : 'false' }}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        @for ($i = 1; $i <= $formularios->lastPage(); $i++)
+                            <li class="page-item {{ $i == $formularios->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $formularios->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        <li class="page-item {{ $formularios->hasMorePages() ? '' : 'disabled' }}">
+                            <a class="page-link" href="{{ $formularios->nextPageUrl() }}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         @endif
     </div>
-
 
 @endsection

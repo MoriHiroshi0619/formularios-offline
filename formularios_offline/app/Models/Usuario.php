@@ -23,12 +23,10 @@ class Usuario extends Authenticatable
         'password',
     ];
 
-    const ALUNO = "ALUNO";
     const PROFESSOR = "PROFESSOR";
 
     const ADMIN = "ADMIN";
     const TIPO = [
-        self::ALUNO,
         self::PROFESSOR,
         self::ADMIN
     ];
@@ -51,15 +49,6 @@ class Usuario extends Authenticatable
     public function setCpfAttribute($cpf)
     {
         $this->attributes['cpf'] = string()->replace(['.', '-'], '', $cpf);
-    }
-
-    public function isAluno(): bool
-    {
-        if($this->tipo === $this::ALUNO){
-            return true;
-        }
-
-        return false;
     }
 
     public function isProfessor():bool

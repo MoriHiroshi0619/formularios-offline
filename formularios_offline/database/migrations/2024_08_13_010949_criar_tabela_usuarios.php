@@ -17,10 +17,9 @@ class CriarTabelaUsuarios extends Migration
 
             $table->enum('tipo', [
                 'PROFESSOR',
-                'ALUNO',
                 'ADMIN',
-            ])->default('ALUNO');
-
+            ])->default('PROFESSOR');
+            $table->string('login')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
