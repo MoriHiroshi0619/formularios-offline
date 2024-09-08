@@ -84,7 +84,7 @@
 
         <div id="salvar" class="row d-none">
             <div class="col-sm-12">
-                <button type="submit" class="btn btn-primary float-end">
+                <button type="submit" class="btn btn-primary float-end" data-action="salvar-formulario">
                     <i class="bi bi-save"></i>
                     Salvar
                 </button>
@@ -97,14 +97,12 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(() => {
-            // Limpar ao recarregar a página
             if ($('#estilo-questao').is(':checked')) {
                 $('[data-action="adicionar-opcao"]').removeClass('d-none');
                 $('#estilo-label').text('Multipla escolha');
                 $('.div-multipla-escolha').removeClass('d-none');
             }
 
-            // Alterna entre questões de texto livre ou múltipla escolha
             $('#estilo-questao').on('change', (e) => {
                 if (e.target.checked) {
                     $('[data-action="adicionar-opcao"]').removeClass('d-none');
@@ -117,10 +115,14 @@
                 }
             });
 
-            // Adiciona mais opções em perguntas de múltipla escolha
             $('[data-action="adicionar-opcao"]').on('click', () => {
                 if ($('.div-multipla-escolha').find('.col-sm-12').length >= 5) {
-                    alert('Você atingiu o limite de alternativas');
+                    Swal.fire({
+                        title: 'Atenção',
+                        text: 'Maximo de 5 opções por pergunta',
+                        icon: "warning",
+                        confirmButtonText: 'OK'
+                    });
                     return;
                 }
                 let divCOl = $('.div-multipla-escolha').find('.col-sm-12').last();
@@ -131,7 +133,6 @@
                 $('.div-multipla-escolha').append(novaOpcao);
             });
 
-            //remove uma opção de múltipla escolha
             $(document).on('click', '[data-action="remover-opcao"]', (e) => {
                 let divCOl = $(e.currentTarget).closest('.col-sm-12');
                 let totalOpcoes = $('.div-multipla-escolha').find('.col-sm-12').length;
@@ -153,7 +154,6 @@
                 let estilo = $('#estilo-questao').is(':checked') ? 'Multipla escolha' : 'Texto livre';
                 let opcoes = [];
 
-                // Coleta opções de múltipla escolha
                 if (estilo === 'Multipla escolha') {
                     $('.div-multipla-escolha').find('.col-sm-12').each((index, element) => {
                         let opcao = $(element).find('input').val();
@@ -162,18 +162,21 @@
                         }
                     });
 
-                    // Verificação: Se houver menos de 2 opções, exibe um alerta
+
                     if (opcoes.length < 2) {
-                        alert('É necessário fornecer no mínimo duas opções para perguntas de múltipla escolha.');
-                        return; // Interrompe a execução se a condição não for atendida
+                        Swal.fire({
+                            title: 'Atenção',
+                            text: 'Uma pergunta de múltipla escolha deve ter no mínimo 2 opções',
+                            icon: "warning",
+                            confirmButtonText: 'OK'
+                        });
+                        return;
                     }
                 }
 
-                // Exibe a div do formulário e o botão de salvar
                 $('.formulario-questoes').removeClass('d-none');
                 $('#salvar').removeClass('d-none');
 
-                // Cria o HTML da nova questão
                 let novaQuestaoHTML = `
                     <div class="questao-div">
                         <div class="questao-tipo">
@@ -206,10 +209,8 @@
                     </div>
                     <hr>`;
 
-                // Adiciona a nova questão à div "formulario-questoes"
                 $('.formulario-questoes').append(novaQuestaoHTML);
 
-                // Limpar os campos do modal após adicionar a pergunta
                 $('[name="questao[texto]"]').val('');
                 $('.div-multipla-escolha .col-sm-12:not(:first)').remove();
                 $('[name="questao[opcao]"]').val('');
@@ -217,6 +218,15 @@
                 $('#estilo-questao').prop('checked', false).trigger('change');
             });
 
+            $(document).on('click', '[data-action="salvar-formulario"]', () => {
+                console.log("olá mundo");
+                Swal.fire({
+                    title: 'Sucesso!',
+                    text: 'A operação foi concluída com êxito.',
+                    icon: "warning",
+                    confirmButtonText: 'OK'
+                });
+            })
 
         });
 
