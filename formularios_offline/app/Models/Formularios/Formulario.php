@@ -17,9 +17,18 @@ class Formulario extends Model
         'descricao_formulario',
     ];
 
+    const string CRIADO = "CRIADO";
+    const string LIBERADO = "LIBERADO";
+    const string FINALIZADO = "FINALIZADO";
+    const array STATUS = [
+        self::CRIADO,
+        self::LIBERADO,
+        self::FINALIZADO
+    ];
+
     public function professor()
     {
-        $this->belongsTo(Usuario::class);
+        return $this->belongsTo(Usuario::class);
     }
 
     public function questoes()
@@ -27,8 +36,30 @@ class Formulario extends Model
         return $this->hasMany(FormularioQuestao::class);
     }
 
-    public function respostas()
+    public function isCriado()
     {
-        return $this->hasMany(RespotaAluno::class);
+        if($this->status === $this::CRIADO){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isLiberado()
+    {
+        if($this->status === $this::LIBERADO){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isFinalizado()
+    {
+        if($this->status === $this::FINALIZADO){
+            return true;
+        }
+
+        return false;
     }
 }

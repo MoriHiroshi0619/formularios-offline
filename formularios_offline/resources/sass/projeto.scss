@@ -8,8 +8,6 @@ $alt-cor-1: #ED602D;
 $fonte-padrao: 'Roboto' , sans-serif;
 $fonte-segundaria: 'Roboto Slab', sans-serif;
 
-//todo: deixar sempre um botão de voltar para navegação
-
 $sombra: 2px 2px 6px rgba(0, 0, 0, 0.3);
 
 body{
@@ -44,6 +42,13 @@ label{
 
 .maozinha {
     cursor: pointer;
+}
+
+.long-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 //site para conseguir mais ilustrações no estilo do projeto: https://storyset.com/illustration
@@ -191,3 +196,63 @@ label{
     }
 }
 
+.formulario-questoes{
+    background-color: white;
+    margin: 30px 0;
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid $preto-2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    font-family: $fonte-segundaria !important;
+
+    hr{
+        width: 100%;
+        border: 1px solid $preto-2;
+    }
+
+    .questao-div{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        span{
+            font-family: $fonte-segundaria !important;
+        }
+
+        .questao-texto{
+            span{
+                color: $preto-1;
+                text-align: justify;
+            }
+        }
+
+        .questao-opcoes{
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-evenly;
+            gap: 30px;
+            list-style-type: lower-alpha;
+            flex-wrap: wrap;
+            margin: 0;
+            li{
+                padding: 5px 0;
+            }
+        }
+    }
+}
+
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; // Suavizar o scroll em dispositivos touch
+}
+
+.table {
+    min-width: 100%;
+}

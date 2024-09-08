@@ -16,6 +16,13 @@ class FormularioQuestao extends Model
         'tipo',
     ];
 
+    const TEXTO_LIVRE = "TEXTO";
+    const MULTIPLA_ESCOLHA = "MULTIPLA_ESCOLHA";
+    const TIPO = [
+        self::TEXTO_LIVRE,
+        self::MULTIPLA_ESCOLHA
+    ];
+
     public function formulario()
     {
         return $this->belongsTo(Formulario::class);

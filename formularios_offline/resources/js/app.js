@@ -1,3 +1,5 @@
-// import 'bootstrap';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
+import Swal from 'sweetalert2';
 require('./bootstrap');
+
+window.Swal = Swal;

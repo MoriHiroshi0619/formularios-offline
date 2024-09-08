@@ -15,10 +15,6 @@ class MultiplaEscolha extends Model
         'opcao_resposta',
     ];
 
-    protected $casts = [
-        'eh_a_correta' => 'boolean',
-    ];
-
     public function questao()
     {
         return $this->belongsTo(FormularioQuestao::class, 'formulario_questao_id');

@@ -13,7 +13,6 @@ class CriarTabelaFormulariosRespostasMultiplasEscolhas extends Migration
             $table->string('opcao_resposta')->nullable(false);
             $table->integer('formulario_questao_id')->unsigned()->nullable(false);
             $table->foreign('formulario_questao_id')->references('id')->on('formularios_questoes');
-            $table->boolean('eh_a_correta')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
