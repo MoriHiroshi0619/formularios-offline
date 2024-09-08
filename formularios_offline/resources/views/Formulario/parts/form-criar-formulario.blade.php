@@ -52,20 +52,42 @@
 
                         <div class="row mt-4 div-multipla-escolha d-none">
                             <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="opcao">Opção 1</label>
+                                <label class="form-label" for="opcao">Opção 1</label>
+                                <div class="input-group">
                                     <input type="text" class="form-control" name="questao[opcao]" data-ordem="1">
+                                    <span class="bg-danger input-group-text maozinha" data-action="remover-opcao">
+                                        <i class="bi bi-trash"></i>
+                                    </span>
                                 </div>
                             </div>
-                            {{--inserir mais alternativas para a qeustão--}}
+                        </div>
+                        <div class="row mt-4 div-opcao-correte d-none">
+                            <div class="col-sm-12">
 
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Adicionar Pergunta</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn btn-primary" data-action="adicionar-pergunta">
+                            Adicionar Pergunta
+                        </button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="formulario-questoes d-none">
+        </div>
+
+        <div id="salvar" class="row d-none">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-primary float-end">
+                    <i class="bi bi-save"></i>
+                    Salvar
+                </button>
             </div>
         </div>
 
@@ -74,32 +96,129 @@
 
 @push('scripts')
     <script type="application/javascript">
-        $(document).ready(()=>{
-            //como ao recarregar a pagina fica na memoria os inputs, eu limpo aqui
-            if( $('#estilo-questao').is(':checked') ){
+        $(document).ready(() => {
+            // Limpar ao recarregar a página
+            if ($('#estilo-questao').is(':checked')) {
                 $('[data-action="adicionar-opcao"]').removeClass('d-none');
                 $('#estilo-label').text('Multipla escolha');
                 $('.div-multipla-escolha').removeClass('d-none');
             }
 
-            $('#estilo-questao').on('change', (e)=>{
-                if( e.target.checked ){
+            // Alterna entre questões de texto livre ou múltipla escolha
+            $('#estilo-questao').on('change', (e) => {
+                if (e.target.checked) {
                     $('[data-action="adicionar-opcao"]').removeClass('d-none');
                     $('#estilo-label').text('Multipla escolha');
                     $('.div-multipla-escolha').removeClass('d-none');
-                }else{
+                } else {
                     $('[data-action="adicionar-opcao"]').addClass('d-none');
                     $('#estilo-label').text('Texto livre');
                     $('.div-multipla-escolha').addClass('d-none');
                 }
             });
 
-            $('[data-action="adicionar-opcao"]').on('click', ()=>{
-                //MELHORAR LÓGICA AO ADICONAR MAIS ALTERNATIVAS
-                let div = $('.div-multipla-escolha');
-                let input = div.find('input').first().clone();
-                div.append(input);
+            // Adiciona mais opções em perguntas de múltipla escolha
+            $('[data-action="adicionar-opcao"]').on('click', () => {
+                if ($('.div-multipla-escolha').find('.col-sm-12').length >= 5) {
+                    alert('Você atingiu o limite de alternativas');
+                    return;
+                }
+                let divCOl = $('.div-multipla-escolha').find('.col-sm-12').last();
+                let ordem = parseInt(divCOl.find('input').data('ordem')) + 1;
+                let novaOpcao = divCOl.clone();
+                novaOpcao.find('label').text(`Opção ${ordem}`);
+                novaOpcao.find('input').data('ordem', ordem).val('');
+                $('.div-multipla-escolha').append(novaOpcao);
             });
+
+            //remove uma opção de múltipla escolha
+            $(document).on('click', '[data-action="remover-opcao"]', (e) => {
+                let divCOl = $(e.currentTarget).closest('.col-sm-12');
+                let totalOpcoes = $('.div-multipla-escolha').find('.col-sm-12').length;
+
+                if (totalOpcoes === 1) {
+                    divCOl.find('input').val('');
+                    return;
+                }
+
+                divCOl.remove();
+                $('.div-multipla-escolha').find('.col-sm-12').each((index, element) => {
+                    $(element).find('label').text(`Opção ${index + 1}`);
+                    $(element).find('input').data('ordem', index + 1);
+                });
+            });
+
+            $('[data-action="adicionar-pergunta"]').on('click', () => {
+                let texto = $('[name="questao[texto]"]').val();
+                let estilo = $('#estilo-questao').is(':checked') ? 'Multipla escolha' : 'Texto livre';
+                let opcoes = [];
+
+                // Coleta opções de múltipla escolha
+                if (estilo === 'Multipla escolha') {
+                    $('.div-multipla-escolha').find('.col-sm-12').each((index, element) => {
+                        let opcao = $(element).find('input').val();
+                        if (opcao.trim() !== '') {
+                            opcoes.push(opcao);
+                        }
+                    });
+
+                    // Verificação: Se houver menos de 2 opções, exibe um alerta
+                    if (opcoes.length < 2) {
+                        alert('É necessário fornecer no mínimo duas opções para perguntas de múltipla escolha.');
+                        return; // Interrompe a execução se a condição não for atendida
+                    }
+                }
+
+                // Exibe a div do formulário e o botão de salvar
+                $('.formulario-questoes').removeClass('d-none');
+                $('#salvar').removeClass('d-none');
+
+                // Cria o HTML da nova questão
+                let novaQuestaoHTML = `
+                    <div class="questao-div">
+                        <div class="questao-tipo">
+                            <span><b>${estilo}:</b></span>
+                            <input type="hidden" name="formulario[tipo]" value="${estilo}">
+                        </div>
+                        <div class="questao-texto">
+                            <span>${texto}</span>
+                            <input type="hidden" name="formulario[questao]" value="${texto}">
+                        </div>`;
+
+                if (estilo === 'Multipla escolha') {
+                    novaQuestaoHTML += `
+                        <div>
+                            <span><b>Opções:</b></span>
+                            <ol class="questao-opcoes">`;
+
+                    opcoes.forEach((opcao, index) => {
+                        novaQuestaoHTML += `
+                            <li>
+                                <span>${opcao}</span>
+                                <input type="hidden" name="formulario[questao][opcao][${index}]" value="${opcao}">
+                            </li>`;
+                    });
+
+                    novaQuestaoHTML += `</ol></div>`;
+                }
+
+                novaQuestaoHTML += `
+                    </div>
+                    <hr>`;
+
+                // Adiciona a nova questão à div "formulario-questoes"
+                $('.formulario-questoes').append(novaQuestaoHTML);
+
+                // Limpar os campos do modal após adicionar a pergunta
+                $('[name="questao[texto]"]').val('');
+                $('.div-multipla-escolha .col-sm-12:not(:first)').remove();
+                $('[name="questao[opcao]"]').val('');
+                $('.div-multipla-escolha').addClass('d-none');
+                $('#estilo-questao').prop('checked', false).trigger('change');
+            });
+
+
         });
+
     </script>
 @endpush

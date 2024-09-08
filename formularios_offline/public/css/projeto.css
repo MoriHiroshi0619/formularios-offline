@@ -158,3 +158,47 @@ label {
     padding: 6px 10px;
   }
 }
+
+.formulario-questoes {
+  background-color: white;
+  margin: 30px 0;
+  width: 100%;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid #171515;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: "Roboto Slab", sans-serif !important;
+}
+.formulario-questoes hr {
+  width: 100%;
+  border: 1px solid #171515;
+}
+.formulario-questoes .questao-div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.formulario-questoes .questao-div span {
+  font-family: "Roboto Slab", sans-serif !important;
+}
+.formulario-questoes .questao-div .questao-texto span {
+  color: #3d3a3a;
+  text-align: justify;
+}
+.formulario-questoes .questao-div .questao-opcoes {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  gap: 30px;
+  list-style-type: lower-alpha;
+  flex-wrap: wrap;
+  margin: 0;
+}
+.formulario-questoes .questao-div .questao-opcoes li {
+  padding: 5px 0;
+}
