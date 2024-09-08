@@ -7,7 +7,7 @@
         </div>
 
         <div class="row mt-4">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 @include('Components.link-card', [
                     'titulo' => 'Formulários',
                     'icone' => 'bi bi-receipt',
@@ -18,12 +18,12 @@
                 ])
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 @include('Components.link-card', [
-                    'titulo' => 'Correção',
+                    'titulo' => 'Resultados',
                     'icone' => 'bi bi-pen',
-                    'link' => route('formulario.create'),
-                    'descricao' => 'Corrija os formulários de seus alunos',
+                    'link' => route('resultado.index'),
+                    'descricao' => 'Verifique os resultados dos formulários',
                     'action' => 'correcao',
                     'imagem' => asset('img/Thesis-rafiki.svg')
                 ])

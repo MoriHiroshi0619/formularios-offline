@@ -43,10 +43,11 @@
                 </div>
             </div>
             <div class="d-flex pt-3 justify-content-end">
-                <a href="{{ route('usuarios.create') }}" class="btn btn-outline-primary me-3">
+                <!--Não será mais necessario uma tela para cadastro de usuarios-->
+                {{--<a href="{{ route('usuarios.create') }}" class="btn btn-outline-primary me-3">
                     <i class="bi bi-person-plus"></i>
                     Cadastrar
-                </a>
+                </a>--}}
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-box-arrow-in-right"></i>
                     Entrar

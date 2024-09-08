@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
+//@deprecated: não será necessario esse gerenciamento de usuarios
 class UsuarioController extends Controller
 {
     public function index()
