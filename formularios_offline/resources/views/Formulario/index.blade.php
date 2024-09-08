@@ -1,3 +1,7 @@
+@php
+    $formularios = \App\Models\Formularios\Formulario::all();
+@endphp
+
 @extends('main')
 
 @section('content')

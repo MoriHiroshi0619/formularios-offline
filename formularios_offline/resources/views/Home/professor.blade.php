@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <div class="row">
             <div class="col-sm-12">
-                <h2>Professor</h2>
+                <h2>Formulários</h2>
             </div>
         </div>
 
@@ -26,17 +26,6 @@
                     'descricao' => 'Corrija os formulários de seus alunos',
                     'action' => 'correcao',
                     'imagem' => asset('img/Thesis-rafiki.svg')
-                ])
-            </div>
-
-            <div class="col-sm-4">
-                @include('Components.link-card', [
-                    'titulo' => 'Alunos',
-                    'icone' => 'bi bi-people',
-                    'link' => route('formulario.create'),
-                    'descricao' => 'Atualize e gerêncie seus alunos',
-                    'action' => 'alunos',
-                    'imagem' => asset('img/Webinar-amico.png')
                 ])
             </div>
         </div>

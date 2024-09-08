@@ -19,7 +19,7 @@ class Formulario extends Model
 
     public function professor()
     {
-        $this->belongsTo(Usuario::class);
+        return $this->belongsTo(Usuario::class);
     }
 
     public function questoes()

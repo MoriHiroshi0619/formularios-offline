@@ -55,7 +55,7 @@
                                 <label class="form-label" for="opcao">Opção 1</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="questao[opcao]" data-ordem="1">
-                                    <span class="bg-danger input-group-text maozinha" data-action="remover-opcao">
+                                    <span class="bg-danger input-group-text maozinha text-white" data-action="remover-opcao">
                                         <i class="bi bi-trash"></i>
                                     </span>
                                 </div>
@@ -217,17 +217,6 @@
                 $('.div-multipla-escolha').addClass('d-none');
                 $('#estilo-questao').prop('checked', false).trigger('change');
             });
-
-            $(document).on('click', '[data-action="salvar-formulario"]', () => {
-                console.log("olá mundo");
-                Swal.fire({
-                    title: 'Sucesso!',
-                    text: 'A operação foi concluída com êxito.',
-                    icon: "warning",
-                    confirmButtonText: 'OK'
-                });
-            })
-
         });
 
     </script>
