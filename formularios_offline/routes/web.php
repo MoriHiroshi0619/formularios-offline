@@ -23,4 +23,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class)->except('create', 'store');
 
     Route::resource('formulario', \App\Http\Controllers\FormularioController::class)->middleware('professor');
+    Route::put('formulario/liberar/{id}', [\App\Http\Controllers\FormularioController::class, 'liberarFormulario'])->name('liberar-formulario')->middleware('professor');
+    Route::put('formulario/encerrar/{id}', [\App\Http\Controllers\FormularioController::class, 'encerrarFormulario'])->name('encerrar-formulario')->middleware('professor');
 });

@@ -90,4 +90,30 @@ class FormularioController extends Controller
             return response()->json(['error' => 'Erro ao tentar excluir o formulário'], 500);
         }
     }
+
+    public function liberarFormulario($formularioId)
+    {
+        $formulario = Formulario::query()->findOrFail($formularioId);
+        if($formulario->isFinalizado()){
+            session()->flash('error', 'Formulário já finalizado!');
+            return response()->json(['error' => 'Formulário já finalizado!'], 400);
+        }
+        $formulario->status = Formulario::LIBERADO;
+        $formulario->save();
+        session()->flash('success', 'Formulário liberado com sucesso!');
+        return response()->noContent();
+    }
+
+    public function encerrarFormulario($formularioId)
+    {
+        $formulario = Formulario::query()->findOrFail($formularioId);
+        if($formulario->isFinalizado()){
+            session()->flash('error', 'Formulário já finalizado!');
+            return response()->json(['error' => 'Formulário já finalizado!'], 400);
+        }
+        $formulario->status = Formulario::FINALIZADO;
+        $formulario->save();
+        session()->flash('success', 'Formulário encerrado com sucesso!');
+        return response()->noContent();
+    }
 }

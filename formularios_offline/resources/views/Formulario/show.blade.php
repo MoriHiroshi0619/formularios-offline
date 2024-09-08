@@ -66,15 +66,17 @@
                     Status: {{ $formulario->status }}
                 </h4>
 
-                <button class="btn btn-primary" type="button" data-action="mudar-status" data-status="{{ $formulario->status }}">
-                    @if( $formulario->isCriado() )
-                        <i class="bi bi-unlock"></i>
-                        Liberar
-                    @elseif( $formulario->isLiberado() )
-                        <i class="bi bi-lock"></i>
-                        Finalizar
-                    @endif
-                </button>
+                @if( !$formulario->isFinalizado() )
+                    <button class="btn btn-primary" type="button" data-action="mudar-status" data-status="{{ $formulario->status }}">
+                        @if( $formulario->isCriado() )
+                            <i class="bi bi-unlock"></i>
+                            Liberar
+                        @elseif( $formulario->isLiberado() )
+                            <i class="bi bi-lock"></i>
+                            Finalizar
+                        @endif
+                    </button>
+                @endif
             </div>
         </div>
     </div>
@@ -103,6 +105,44 @@
                         await Swal.fire({
                             icon: 'error',
                             title: 'Erro ao apagar formulário',
+                            text: e.message
+                        })
+                    }
+                });
+            })
+
+            $('[data-action="mudar-status"]').on('click', async (e) => {
+                let status = $(e.target).closest('button').data('status');
+                let novoStatus = status === 'CRIADO' ? 'LIBERADO' : 'FINALIZADO';
+                let texto = status === 'CRIADO' ? 'Liberar' : 'Finalizar';
+
+                Swal.fire({
+                    title: "Atenção!",
+                    text: `Deseja mesmo ${texto} o formulário?`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    cancelButtonColor: "#a6a6a6",
+                    confirmButtonColor: "#2291f1",
+                    confirmButtonText: `${texto}!`,
+                    reverseButtons: true
+                }).then( async (result) => {
+                    if (!result.isConfirmed) return;
+                    let url = '';
+                    switch (novoStatus){
+                        case 'LIBERADO':
+                            url = `/formulario/liberar/{{ $formulario->id }}`;
+                            break;
+                        case 'FINALIZADO':
+                            url = `/formulario/encerrar/{{ $formulario->id }}`;
+                            break;
+                    }
+                    try{
+                        await axios.put(url, { status: novoStatus });
+                        window.location.reload();
+                    }catch (e) {
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao mudar status do formulário',
                             text: e.message
                         })
                     }

@@ -1,5 +1,5 @@
 @php
-    $formularios = \App\Models\Formularios\Formulario::query()->with('questoes')->orderBy('created_at')->paginate(10);
+    $formularios = \App\Models\Formularios\Formulario::query()->with('questoes')->orderBy('id')->paginate(10);
 @endphp
 
 @extends('main')
@@ -113,11 +113,11 @@
                     confirmButtonColor: "#d33",
                     confirmButtonText: "Apagar!",
                     reverseButtons: true
-                }).then( async (result, e) => {
+                }).then( async (result) => {
                     if (!result.isConfirmed) return;
                     try{
                         await axios.delete(`/formulario/${id}`);
-                        window.location.href = '{{ route('formulario.index') }}';
+                        window.location.reload();
                     }catch (e) {
                         await Swal.fire({
                             icon: 'error',
