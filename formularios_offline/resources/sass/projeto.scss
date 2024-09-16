@@ -35,10 +35,23 @@ a{
     text-decoration: none;
 }
 
+i[class^="bi-"], i[class*=" bi-"] {
+    text-shadow:
+        0.2px 0 currentColor,
+        -0.2px 0 currentColor,
+        0 0.2px currentColor,
+        0 -0.2px currentColor;
+}
+
 label{
     font-weight: bolder;
     padding-top: 4px;
 }
+
+textarea {
+    white-space: pre-line;
+}
+
 
 .maozinha {
     cursor: pointer;
@@ -256,3 +269,123 @@ label{
 .table {
     min-width: 100%;
 }
+
+.visitante-formularios {
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 20px;
+
+    .formulario {
+        flex: 1 1 100%;
+        max-width: 500px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 8px;
+        border: 1px solid $fundo-2;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: #f1f3f5;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .formulario-header,
+        .formulario-footer {
+            margin: 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .formulario-header {
+            background-color: #f8f9fa;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            span {
+                font-family: $fonte-segundaria;
+            }
+        }
+
+        .formulario-footer {
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.875rem;
+            color: #6c757d;
+
+            span {
+                font-family: $fonte-segundaria;
+            }
+        }
+    }
+}
+//
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap; /* Permite que a paginação quebre em várias linhas */
+    justify-content: center;
+    gap: 5px; /* Espaçamento entre os botões */
+}
+
+.pagination .page-item {
+    flex: none; /* Evita que os itens cresçam ou encolham */
+    width: 45px; /* Define uma largura fixa para os botões */
+    text-align: center;
+}
+
+.pagination .page-link {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    text-decoration: none;
+    width: 100%; /* O link ocupa o espaço do botão */
+    text-align: center;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination .page-item.disabled .page-link {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pagination .page-item a.page-link {
+    white-space: nowrap; /* Garante que os botões "Anterior" e "Próxima" não quebrem o texto */
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .pagination .page-item {
+        width: 35px; /* Reduz a largura dos botões em telas menores */
+    }
+
+    .pagination .page-link {
+        padding: 6px 8px;
+        font-size: 0.875rem;
+    }
+}
+
+

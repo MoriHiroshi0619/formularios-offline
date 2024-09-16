@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Route;
     Route::post('store', [\App\Http\Controllers\UsuarioController::class, 'store'])->name('store');
 });*/
 
-//todo: rotas de visitantes para prencher o formulario
-//todo: corrigir redirecionamento de rota para visitante em vez de login em /Users/hiroshi/projeto_extensao/formularios_offline/app/Http/Middleware/Authenticate.php
-Route::prefix('visitantes')->name('visitantes.')->middleware('guest')->group(function () {
+Route::prefix('visitantes')->name('visitantes.')->group(function () {
+    Route::resource('formularios', \App\Http\Controllers\VisitanteFormularioController::class);
+    Route::get('realizar-formulario/{formularioId}', [\App\Http\Controllers\VisitanteFormularioController::class, 'realizarFormulario'])->name('realizar-formulario');
+    Route::post('salvar-questao-sessao/${id}', [\App\Http\Controllers\VisitanteFormularioController::class, 'salvarRespostasNaSessao'])->name('salvar-questao-sessao');
 
+//    Route::get('limpar', [\App\Http\Controllers\VisitanteFormularioController::class, 'limparSessao'])->name('limpar');
 });
 
 

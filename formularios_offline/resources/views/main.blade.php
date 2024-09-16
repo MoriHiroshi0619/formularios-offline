@@ -43,10 +43,19 @@
                         </form>
                     @else
                         <div>
-                            <a href="#" class="navbar-brand fs-3 titulo">
+                            <a href="{{ route('visitantes.formularios.index') }}" class="navbar-brand fs-3 titulo">
                                 Formulários Offline
                             </a>
                         </div>
+                        @if(request()->routeIs('visitantes.*'))
+                            <div>
+                                <a href="{{ route('login.index') }}" class="btn btn-primary">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                        Entrar
+                                </a>
+                            </div>
+                        @endif
+
                    @endif
                 </div>
             </div>
