@@ -99,6 +99,7 @@ class FormularioController extends Controller
             return response()->json(['error' => 'Formulário já finalizado!'], 400);
         }
         $formulario->status = Formulario::LIBERADO;
+        $formulario->liberado_em = now();
         $formulario->save();
         session()->flash('success', 'Formulário liberado com sucesso!');
         return response()->noContent();
@@ -112,6 +113,7 @@ class FormularioController extends Controller
             return response()->json(['error' => 'Formulário já finalizado!'], 400);
         }
         $formulario->status = Formulario::FINALIZADO;
+        $formulario->finalizado_em = now();
         $formulario->save();
         session()->flash('success', 'Formulário encerrado com sucesso!');
         return response()->noContent();

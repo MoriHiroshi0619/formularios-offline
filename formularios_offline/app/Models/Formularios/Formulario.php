@@ -3,6 +3,7 @@
 namespace App\Models\Formularios;
 
 use App\Models\Usuario;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,6 +16,8 @@ class Formulario extends Model
     protected $fillable = [
         'nome_formulario',
         'descricao_formulario',
+        'liberado_em',
+        'finalizado_em'
     ];
 
     const string CRIADO = "CRIADO";
@@ -34,6 +37,11 @@ class Formulario extends Model
     public function questoes()
     {
         return $this->hasMany(FormularioQuestao::class);
+    }
+
+    public function setLiberadoEmAttribute($value)
+    {
+        $this->attributes['liberado_em'] = Carbon::parse($value)->format('Y-m-d H:i:s');
     }
 
     public function isCriado()

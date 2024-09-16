@@ -110,6 +110,7 @@
                     icon: "warning",
                     showCancelButton: true,
                     cancelButtonColor: "#a6a6a6",
+                    cancelButtonText: "Cancelar",
                     confirmButtonColor: "#d33",
                     confirmButtonText: "Apagar!",
                     reverseButtons: true
@@ -122,7 +123,7 @@
                         await Swal.fire({
                             icon: 'error',
                             title: 'Erro ao apagar formulário',
-                            text: e.message
+                            text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
                         })
                     }
                 });

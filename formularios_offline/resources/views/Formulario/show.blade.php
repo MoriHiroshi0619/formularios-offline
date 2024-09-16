@@ -124,6 +124,7 @@
                     cancelButtonColor: "#a6a6a6",
                     confirmButtonColor: "#2291f1",
                     confirmButtonText: `${texto}!`,
+                    cancelButtonText: "Cancelar",
                     reverseButtons: true
                 }).then( async (result) => {
                     if (!result.isConfirmed) return;
