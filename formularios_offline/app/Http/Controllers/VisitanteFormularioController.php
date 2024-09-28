@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Formularios\Formulario;
 use App\Models\Formularios\FormularioQuestao;
+use App\Models\Formularios\MultiplaEscolha;
 use App\Models\Respostas\FormularioResposta;
 use App\Models\Respostas\resposta;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class VisitanteFormularioController extends Controller
 {
     public function index()
     {
+        //todo: tentar controlar com cookies e user agent para desmostrar o formulario para alunos que já responderam
         $formularios = Formulario::query()
             ->where('status', Formulario::LIBERADO)
             ->with('professor')
@@ -27,7 +29,7 @@ class VisitanteFormularioController extends Controller
     {
         try {
             DB::beginTransaction();
-            $formularioID = $request->input('formularioId');
+            $formularioID = $request->input('formulario');
             $respostas = session()->get('respostas', []);
 
             if(!data_get($respostas, $formularioID)) throw new \Exception('Não foi possivel verificar as respostas');
@@ -37,7 +39,7 @@ class VisitanteFormularioController extends Controller
                 ->where('status', Formulario::LIBERADO)
                 ->firstOrFail();
 
-            $nome = data_get($respostas, $formularioID.'.nome');
+            $nome =  data_get($respostas, $formularioID.'.nome', $request->input('aluno'));
 
             $formularioResposta = new FormularioResposta();
             $formularioResposta->fill(['nome_aluno' => $nome]);
@@ -53,7 +55,8 @@ class VisitanteFormularioController extends Controller
                 if ( $tipo === FormularioQuestao::TEXTO_LIVRE ){
                     $respostaModel->fill(['resposta' => $resposta]);
                 } else {
-                    $respostaModel->formularioResposta()->associate($formularioResposta);
+                    $opcaoMultiplaEscolha =  MultiplaEscolha::query()->where('id', $resposta)->first();
+                    $respostaModel->resposta()->associate($opcaoMultiplaEscolha);
                 }
                 $respostaModel->save();
             });
@@ -101,9 +104,4 @@ class VisitanteFormularioController extends Controller
             return response()->json(['error' => 'Erro ao tentar salvar a resposta'], 500);
         }
     }
-
-    /*public function limparSessao(Request $request)
-    {
-        session()->forget('respostas');
-    }*/
 }

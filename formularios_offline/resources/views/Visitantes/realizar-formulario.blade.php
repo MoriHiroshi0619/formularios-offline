@@ -24,7 +24,43 @@
         <div class="col-sm-12">
             <div class="collapse" id="tutorial-realizar-formulario">
                 <div class="card card-body">
-                    ainda tenho que pensar em como colocar um tutorial aqui
+                    <h5><strong>Como Preencher o Formulário</strong></h5>
+                    <ol>
+                        <li>
+                            <strong>Leia a Pergunta:</strong>
+                        </li>
+                        <p>
+                            Cada pergunta foi formulada para coletar suas opiniões ou informações específicas. Leia com atenção antes de responder.
+                        </p>
+
+                        <li>
+                            <strong>Responda a Pergunta:</strong>
+                        </li>
+                        <p>
+                            Dependendo do tipo de pergunta, você poderá ver campos de <strong>resposta dissertativa</strong> (onde pode escrever livremente) ou opções de <strong>múltipla escolha</strong> (onde você seleciona uma resposta dentre várias opções).
+                        </p>
+
+                        <li>
+                            <strong>Respostas de Múltipla Escolha:</strong>
+                        </li>
+                        <p>
+                            Em perguntas com múltipla escolha, selecione a opção que melhor reflete sua opinião ou situação. Você pode alterar sua escolha enquanto o formulário estiver aberto.
+                        </p>
+
+                        <li>
+                            <strong>Respostas Dissertativas:</strong>
+                        </li>
+                        <p>
+                            Em perguntas dissertativas, utilize o campo de texto para fornecer uma resposta mais detalhada. Lembre-se de ser claro e objetivo.
+                        </p>
+
+                        <li>
+                            <strong>Envio do Formulário:</strong>
+                        </li>
+                        <p>
+                            Ao finalizar, revise suas respostas e clique no botão <button class="btn btn-primary btn-sm">Salvar</button> para salvar suas respostas.
+                        </p>
+                    </ol>
                 </div>
             </div>
         </div>
@@ -99,9 +135,6 @@
 
     <div class="row pt-2">
         <div class="col-sm-12">
-            {{--<button class="btn btn-warning" data-action="limpar">
-                limpar
-            </button>--}}
             <button id="submit" class="btn btn-primary float-end">
                 <i class="bi bi-save"></i>
                 salvar
@@ -113,6 +146,17 @@
     <script type="application/javascript">
         $(document).ready(() => {
             $('#submit').click(() => {
+                let nomeAluno = $('#nome_aluno').val();
+                if(!nomeAluno){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Nome do aluno não informado',
+                        text: 'Por favor, informe seu nome para salvar as respostas',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    return;
+                }
                 Swal.fire({
                     title: "Deseja enviar suas respostas agora?",
                     text: "Por favor verifique se todos os campos foram preenchidos",
@@ -127,7 +171,7 @@
                     if (result.isConfirmed) {
                         try {
                             let formularioId = '{{ $formulario->id }}';
-                            await axios.post('{{ route('visitantes.formularios.store') }}', { formularioId });
+                            await axios.post('{{ route('visitantes.formularios.store') }}', { formulario: formularioId, aluno: nomeAluno });
                             window.location.href = '{{ route('visitantes.formularios.index') }}';
                         }catch (e) {
                             await Swal.fire({
@@ -139,26 +183,6 @@
                     }
                 });
             })
-
-            /*$('body').on('click', 'button[data-action="limpar"]', async () => {
-                try{
-                    await axios.get('{{ route('visitantes.limpar') }}');
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'Limpado com sucesso',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }catch (e) {
-                    await Swal.fire({
-                        icon: 'error',
-                        title: 'Erro ao limpar',
-                        text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }
-            });*/
 
             $('body').on('click', '.page-item', async (e) => {
                 e.preventDefault();
