@@ -1,10 +1,3 @@
-@php
-    $formularios = \App\Models\Formularios\Formulario::query()
-        ->with('questoes')
-        ->orderBy('id', 'desc')
-        ->paginate(10);
-@endphp
-
 @extends('main')
 
 @section('content')
@@ -32,10 +25,39 @@
     </div>
 
     <div class="row mt-3">
+        <div class="col-md-12">
+            <form method="GET" action="{{ route('formulario.index') }}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="form-group mb-0">
+                        <label for="nome_formulario">Nome do Formulário</label>
+                        <input type="text" name="nome_formulario" class="form-control" id="nome_formulario"
+                               value="{{ request('nome_formulario', session('filtros.nome_formulario', '')) }}">
+                    </div>
+
+                    <div class="form-group mb-0 ms-3">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="">Todos</option>
+                            <option value="CRIADO" {{ request('status', session('filtros.status')) == 'CRIADO' ? 'selected' : '' }}>Criado</option>
+                            <option value="LIBERADO" {{ request('status', session('filtros.status')) == 'LIBERADO' ? 'selected' : '' }}>Liberado</option>
+                            <option value="FINALIZADO" {{ request('status', session('filtros.status')) == 'FINALIZADO' ? 'selected' : '' }}>Finalizado</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex ms-3 align-items-center">
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                        <a href="{{ route('formulario.index', ['nome_formulario' => '', 'status' => '']) }}" class="btn btn-secondary ms-2">Limpar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-3">
         @if( $formularios->isEmpty() )
             <div class="col-sm-12">
                 <div class="alert alert-warning" role="alert">
-                    Você ainda não possui formulários cadastrados
+                    Não existe formulários
                 </div>
             </div>
         @else
