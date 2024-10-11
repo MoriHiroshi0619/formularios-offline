@@ -16,9 +16,9 @@ class FormularioQuestao extends Model
         'tipo',
     ];
 
-    const TEXTO_LIVRE = "TEXTO";
-    const MULTIPLA_ESCOLHA = "MULTIPLA_ESCOLHA";
-    const TIPO = [
+    const string TEXTO_LIVRE = "TEXTO";
+    const string MULTIPLA_ESCOLHA = "MULTIPLA_ESCOLHA";
+    const array TIPO = [
         self::TEXTO_LIVRE,
         self::MULTIPLA_ESCOLHA
     ];
