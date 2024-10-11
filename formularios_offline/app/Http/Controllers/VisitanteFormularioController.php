@@ -14,11 +14,13 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class VisitanteFormularioController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //todo: tentar controlar com cookies e user agent para desmostrar o formulario para alunos que já responderam
+        $formulariosRespondidos = json_decode($request->cookie('formularios_respondidos', '[]'), true);
+
         $formularios = Formulario::query()
             ->where('status', Formulario::LIBERADO)
+            ->whereNotIn('id', $formulariosRespondidos)
             ->with('professor')
             ->paginate(10);
 
@@ -32,7 +34,7 @@ class VisitanteFormularioController extends Controller
             $formularioID = $request->input('formulario');
             $respostas = session()->get('respostas', []);
 
-            if(!data_get($respostas, $formularioID)) throw new \Exception('Não foi possivel verificar as respostas');
+            if(!data_get($respostas, $formularioID)) throw new \Exception('Não foi possível verificar as respostas');
 
             $formulario = Formulario::query()
                 ->where('id', $formularioID)
@@ -47,12 +49,14 @@ class VisitanteFormularioController extends Controller
             $formularioResposta->save();
 
             collect($respostas[$formularioID])->each(function ($resposta, $questaoId) use ($formularioResposta) {
-                if ( $questaoId === 'nome') return null;
+                if ($questaoId === 'nome') return null;
+
                 $respostaModel = new resposta();
                 $respostaModel->questao()->associate($questaoId);
                 $respostaModel->formularioResposta()->associate($formularioResposta);
+
                 $tipo = FormularioQuestao::query()->where('id', $questaoId)->value('tipo');
-                if ( $tipo === FormularioQuestao::TEXTO_LIVRE ){
+                if ($tipo === FormularioQuestao::TEXTO_LIVRE) {
                     $respostaModel->fill(['resposta' => $resposta]);
                 } else {
                     $opcaoMultiplaEscolha =  MultiplaEscolha::query()->where('id', $resposta)->first();
@@ -61,14 +65,18 @@ class VisitanteFormularioController extends Controller
                 $respostaModel->save();
             });
 
-            session()->forget('respostas.'.$formularioID);
+            $formulariosRespondidos = json_decode($request->cookie('formularios_respondidos', '[]'), true);
+            $formulariosRespondidos[] = $formularioID;
+
             DB::commit();
+
+            session()->forget('respostas.' . $formularioID);
             session()->flash('success', 'Formulário enviado com sucesso');
-            return response()->noContent();
-        } catch (NotFoundExceptionInterface | ContainerExceptionInterface | \Exception $e) {
+
+            return response()->noContent()->cookie('formularios_respondidos', json_encode($formulariosRespondidos), 60 * 24 * 30);
+        } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
-            return response()->json(['error' => 'Erro ao tentar enviar formulario'], 500);
+            return response()->json(['error' => 'Erro ao tentar enviar o formulário'], 500);
         }
     }
 
