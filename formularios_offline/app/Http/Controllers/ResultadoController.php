@@ -12,7 +12,7 @@ class ResultadoController extends Controller
     {
         $formulariosFinalizados = \App\Models\Formularios\Formulario::query()
             ->where('status', 'FINALIZADO')
-            ->orderBy('id')
+            ->orderBy('finalizado_em', 'desc')
             ->paginate(10);
 
         return view('Resultados.index', compact('formulariosFinalizados'));
