@@ -2,6 +2,7 @@
 
 namespace App\Models\Formularios;
 
+use App\Models\Respostas\FormularioResposta;
 use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,11 @@ class Formulario extends Model
     public function questoes()
     {
         return $this->hasMany(FormularioQuestao::class);
+    }
+
+    public function respostas()
+    {
+        return $this->hasMany(FormularioResposta::class);
     }
 
     public function setLiberadoEmAttribute($value)
