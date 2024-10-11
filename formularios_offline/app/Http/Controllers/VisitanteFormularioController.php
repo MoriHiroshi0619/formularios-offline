@@ -88,17 +88,35 @@ class VisitanteFormularioController extends Controller
     public function salvarRespostasNaSessao(Request $request, $formularioId)
     {
         try {
+            // Capturar a entrada de resposta
             $resposta = $request->input('resposta', []);
             $respostasSalvas = session()->get('respostas', []);
+
             if (!$resposta) return null;
 
-            $respostasFormulario = data_get($respostasSalvas, $formularioId, []);
-            $respostasFormulario[$resposta['questao']] = $resposta['resposta'];
-            $respostasFormulario['nome'] = $resposta['aluno'];
+            // Extrair nome e as questões da resposta
+            $nomeAluno = $resposta['aluno'] ?? null;
+            $questoesRespostas = $resposta['questoes'] ?? [];
 
+            // Recuperar as respostas salvas do formulário específico
+            $respostasFormulario = data_get($respostasSalvas, $formularioId, []);
+
+            // Atualizar o nome do aluno se ele foi enviado
+            if ($nomeAluno) {
+                $respostasFormulario['nome'] = $nomeAluno;
+            }
+
+            // Atualizar as respostas de questões
+            foreach ($questoesRespostas as $questaoId => $respostaQuestao) {
+                $respostasFormulario[$questaoId] = $respostaQuestao;
+            }
+
+            // Salvar o estado atualizado das respostas
             $respostasSalvas[$formularioId] = $respostasFormulario;
 
+            // Atualizar a sessão com as novas respostas
             session()->put('respostas', $respostasSalvas);
+
             return response()->noContent();
         } catch (NotFoundExceptionInterface | ContainerExceptionInterface | \Exception $e) {
             return response()->json(['error' => 'Erro ao tentar salvar a resposta'], 500);

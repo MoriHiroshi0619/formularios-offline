@@ -145,10 +145,10 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(() => {
-            $('#submit').click(() => {
+            $('#submit').click(async () => {
                 let nomeAluno = $('#nome_aluno').val();
-                if(!nomeAluno){
-                    Swal.fire({
+                if (!nomeAluno) {
+                    await Swal.fire({
                         icon: 'error',
                         title: 'Nome do aluno não informado',
                         text: 'Por favor, informe seu nome para salvar as respostas',
@@ -157,32 +157,70 @@
                     });
                     return;
                 }
-                Swal.fire({
-                    title: "Deseja enviar suas respostas agora?",
-                    text: "Por favor verifique se todos os campos foram preenchidos",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Sim, enviar respostas!",
-                    cancelButtonText: "Cancelar",
-                    reverseButtons: true
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        try {
-                            let formularioId = '{{ $formulario->id }}';
-                            await axios.post('{{ route('visitantes.formularios.store') }}', { formulario: formularioId, aluno: nomeAluno });
-                            window.location.href = '{{ route('visitantes.formularios.index') }}';
-                        }catch (e) {
-                            await Swal.fire({
-                                icon: 'error',
-                                title: 'Erro ao enviar respostas',
-                                text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
-                            });
-                        }
-                    }
+
+                let respostas = {
+                    aluno: nomeAluno,
+                    questoes: {}
+                };
+
+                // Captura as respostas de múltipla escolha
+                $('input[type="radio"]:checked').each(function () {
+                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
+                    respostas.questoes[questaoId] = $(this).val();
                 });
-            })
+
+                // Captura as respostas dissertativas
+                $('textarea').each(function () {
+                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
+                    respostas.questoes[questaoId] = $(this).val();
+                });
+
+                // Salva as respostas da última página na sessão antes de submeter
+                try {
+                    let formularioId = '{{ $formulario->id }}';
+                    console.log(respostas, formularioId);
+                    await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', {
+                        resposta: respostas
+                    });
+
+                    // Envia o formulário completo após salvar as respostas na sessão
+                    Swal.fire({
+                        title: "Deseja enviar suas respostas agora?",
+                        text: "Por favor, verifique se todos os campos foram preenchidos",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Sim, enviar respostas!",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                await axios.post('{{ route('visitantes.formularios.store') }}', { formulario: formularioId, aluno: nomeAluno });
+                                window.location.href = '{{ route('visitantes.formularios.index') }}';
+                            } catch (e) {
+                                await Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erro ao enviar respostas',
+                                    text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
+                                });
+                            }
+                        }
+                    });
+
+                } catch (e) {
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Erro ao salvar resposta',
+                        text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            });
+
+
 
             $('body').on('click', '.page-item', async (e) => {
                 e.preventDefault();
