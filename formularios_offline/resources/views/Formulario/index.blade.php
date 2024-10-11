@@ -1,5 +1,8 @@
 @php
-    $formularios = \App\Models\Formularios\Formulario::query()->with('questoes')->orderBy('id')->paginate(10);
+    $formularios = \App\Models\Formularios\Formulario::query()
+        ->with('questoes')
+        ->orderBy('id', 'desc')
+        ->paginate(10);
 @endphp
 
 @extends('main')

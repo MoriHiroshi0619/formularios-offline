@@ -35,4 +35,5 @@ Route::middleware(['auth', 'professor'])->group(function () {
     Route::put('formulario/encerrar/{id}', [\App\Http\Controllers\FormularioController::class, 'encerrarFormulario'])->name('encerrar-formulario');
 
     Route::resource('resultado', \App\Http\Controllers\ResultadoController::class);
+    Route::get('resultado/{formularioId}/resposta/{respostaId}', [\App\Http\Controllers\ResultadoController::class, 'showAluno'])->name('resultado.show-aluno');
 });
