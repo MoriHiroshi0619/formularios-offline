@@ -10,10 +10,31 @@ use Illuminate\Support\Facades\DB;
 
 class FormularioController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('formulario.index');
+        $nomeFormulario = $request->input('nome_formulario', session('filtros.nome_formulario', ''));
+        $status = $request->input('status', session('filtros.status', ''));
+
+        session([
+            'filtros.nome_formulario' => $nomeFormulario,
+            'filtros.status' => $status,
+        ]);
+
+        $query = Formulario::query()->with('questoes');
+
+        if ($nomeFormulario) {
+            $query->where('nome_formulario', 'ilike', $nomeFormulario . '%');
+        }
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $formularios = $query->orderBy('id', 'desc')->paginate(10);
+
+        return view('formulario.index', compact('formularios'));
     }
+
 
     public function create()
     {
