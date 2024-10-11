@@ -16,6 +16,10 @@
                     Resultados - Formulário: {{ $formulario->nome_formulario }}
                     <i class="bi bi-bar-chart-line"></i>
                 </h2>
+
+                <a href="{{ route('resultado.gerar-pdf', $formulario->id) }}" class="btn btn-success float-end" target="_blank">
+                    <i class="bi bi-file-earmark-pdf"></i> Gerar PDF
+                </a>
             </div>
         </div>
     </div>

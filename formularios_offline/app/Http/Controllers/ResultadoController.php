@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Formularios\Formulario;
 use App\Models\Respostas\FormularioResposta;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+
 
 class ResultadoController extends Controller
 {
@@ -48,4 +50,24 @@ class ResultadoController extends Controller
 
         return view('Resultados.aluno-show', compact('formulario', 'respostaAluno'));
     }
+
+    public function gerarPDF($formularioId, $respostaAlunoId)
+    {
+        $formulario = Formulario::with('questoes')->findOrFail($formularioId);
+        $respostaAluno = FormularioResposta::with('respostas')->findOrFail($respostaAlunoId);
+
+        $pdf = PDF::loadView('pdfs.resposta-aluno', compact('formulario', 'respostaAluno'));
+
+        return $pdf->stream("respostas-aluno-{$respostaAluno->nome_aluno}.pdf");
+    }
+
+    public function gerarPdfRespostas($formularioId)
+    {
+        $formulario = Formulario::with('respostas')->findOrFail($formularioId);
+        $respostas = FormularioResposta::where('formulario_id', $formularioId)->get();
+
+        $pdf = Pdf::loadView('pdfs.respostas-gerais', compact('formulario', 'respostas'));
+        return $pdf->stream('respostas-formulario-' . $formularioId . '.pdf');
+    }
+
 }
