@@ -123,31 +123,52 @@
                     </div>
                 @elseif($questao->tipo === \App\Models\Formularios\FormularioQuestao::TEXTO_LIVRE)
                     <div class="form-group">
-                        <textarea class="form-control" name="resposta[{{ $questao->id }}]" rows="10">
-                            {{ $respostasSalvas[$questao->id] ?? '' }}
-                        </textarea>
+                        <textarea class="form-control" name="resposta[{{ $questao->id }}]" rows="10">{{ $respostasSalvas[$questao->id] ?? '' }}</textarea>
                     </div>
                 @endif
             @endforeach
         </div>
     </div>
 
-
     <div class="row pt-2">
         <div class="col-sm-12">
             <button id="submit" class="btn btn-primary float-end">
-                <i class="bi bi-save"></i>
-                salvar
+                <i class="bi bi-save"></i> salvar
             </button>
         </div>
     </div>
 @endsection
+
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(() => {
+            // Função para capturar todas as respostas da página atual
+            function capturarRespostas() {
+                let respostas = {
+                    aluno: $('#nome_aluno').val(),
+                    questoes: {}
+                };
+
+                // Captura respostas de radio
+                $('input[type="radio"]:checked').each(function () {
+                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
+                    respostas.questoes[questaoId] = $(this).val();
+                });
+
+                // Captura respostas de textarea
+                $('textarea').each(function () {
+                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
+                    respostas.questoes[questaoId] = $(this).val();
+                });
+
+                return respostas;
+            }
+
+            // Evento de salvar as respostas quando o formulário é enviado
             $('#submit').click(async () => {
-                let nomeAluno = $('#nome_aluno').val();
-                if (!nomeAluno) {
+                let respostas = capturarRespostas();
+
+                if (!respostas.aluno) {
                     await Swal.fire({
                         icon: 'error',
                         title: 'Nome do aluno não informado',
@@ -158,32 +179,10 @@
                     return;
                 }
 
-                let respostas = {
-                    aluno: nomeAluno,
-                    questoes: {}
-                };
-
-                // Captura as respostas de múltipla escolha
-                $('input[type="radio"]:checked').each(function () {
-                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
-                    respostas.questoes[questaoId] = $(this).val();
-                });
-
-                // Captura as respostas dissertativas
-                $('textarea').each(function () {
-                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
-                    respostas.questoes[questaoId] = $(this).val();
-                });
-
-                // Salva as respostas da última página na sessão antes de submeter
                 try {
                     let formularioId = '{{ $formulario->id }}';
-                    console.log(respostas, formularioId);
-                    await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', {
-                        resposta: respostas
-                    });
+                    await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', { resposta: respostas });
 
-                    // Envia o formulário completo após salvar as respostas na sessão
                     Swal.fire({
                         title: "Deseja enviar suas respostas agora?",
                         text: "Por favor, verifique se todos os campos foram preenchidos",
@@ -197,7 +196,7 @@
                     }).then(async (result) => {
                         if (result.isConfirmed) {
                             try {
-                                await axios.post('{{ route('visitantes.formularios.store') }}', { formulario: formularioId, aluno: nomeAluno });
+                                await axios.post('{{ route('visitantes.formularios.store') }}', { formulario: formularioId, aluno: respostas.aluno });
                                 window.location.href = '{{ route('visitantes.formularios.index') }}';
                             } catch (e) {
                                 await Swal.fire({
@@ -220,33 +219,15 @@
                 }
             });
 
-
-
+            // Evento de navegação entre páginas de questões
             $('body').on('click', '.page-item', async (e) => {
                 e.preventDefault();
-                let respostas = null
-                $('input[type="radio"]:checked').each(function () {
-                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
-                    respostas = {
-                        questao: questaoId,
-                        resposta: $(this).val(),
-                        aluno: $('#nome_aluno').val()
-                    }
-                });
+                let respostas = capturarRespostas();
 
-                $('textarea').each(function () {
-                    let questaoId = $(this).attr('name').replace('resposta[', '').replace(']', '');
-                    respostas = {
-                        questao: questaoId,
-                        resposta: $(this).val(),
-                        aluno: $('#nome_aluno').val()
-                    }
-                });
-
-                try{
-                    if(respostas) await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', { resposta: respostas });
+                try {
+                    if (respostas) await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', { resposta: respostas });
                     window.location.href = $(e.target).attr('href');
-                }catch (e){
+                } catch (e) {
                     await Swal.fire({
                         icon: 'error',
                         title: 'Erro ao salvar resposta',
@@ -258,5 +239,5 @@
             });
         });
     </script>
-
 @endpush
+
