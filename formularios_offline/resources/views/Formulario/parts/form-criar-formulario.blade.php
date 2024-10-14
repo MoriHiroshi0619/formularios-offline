@@ -4,7 +4,7 @@
         <div class="row align-items-end">
             <div class="col-sm-8">
                 <div class="form-group">
-                    <label>Nome do formalário</label>
+                    <label>Nome do formulário</label>
                     <input type="text" id="nome-formulario" class="form-control" name="formulario[nome]" required>
                 </div>
             </div>
@@ -119,30 +119,30 @@
                 if ($('.div-multipla-escolha').find('.col-sm-12').length >= 5) {
                     Swal.fire({
                         title: 'Atenção',
-                        text: 'Maximo de 5 opções por pergunta',
+                        text: 'Máximo de 5 opções por pergunta',
                         icon: "warning",
                         confirmButtonText: 'OK'
                     });
                     return;
                 }
-                let divCOl = $('.div-multipla-escolha').find('.col-sm-12').last();
-                let ordem = parseInt(divCOl.find('input').data('ordem')) + 1;
-                let novaOpcao = divCOl.clone();
+                let divCol = $('.div-multipla-escolha').find('.col-sm-12').last();
+                let ordem = parseInt(divCol.find('input').data('ordem')) + 1;
+                let novaOpcao = divCol.clone();
                 novaOpcao.find('label').text(`Opção ${ordem}`);
                 novaOpcao.find('input').data('ordem', ordem).val('');
                 $('.div-multipla-escolha').append(novaOpcao);
             });
 
             $(document).on('click', '[data-action="remover-opcao"]', (e) => {
-                let divCOl = $(e.currentTarget).closest('.col-sm-12');
+                let divCol = $(e.currentTarget).closest('.col-sm-12');
                 let totalOpcoes = $('.div-multipla-escolha').find('.col-sm-12').length;
 
                 if (totalOpcoes === 1) {
-                    divCOl.find('input').val('');
+                    divCol.find('input').val('');
                     return;
                 }
 
-                divCOl.remove();
+                divCol.remove();
                 $('.div-multipla-escolha').find('.col-sm-12').each((index, element) => {
                     $(element).find('label').text(`Opção ${index + 1}`);
                     $(element).find('input').data('ordem', index + 1);
@@ -161,7 +161,6 @@
                             opcoes.push(opcao);
                         }
                     });
-
 
                     if (opcoes.length < 2) {
                         Swal.fire({
@@ -186,26 +185,21 @@
                         <div class="questao-texto">
                             <span>${texto}</span>
                             <input type="hidden" name="formulario[questao]" value="${texto}">
-                        </div>`;
-
-                if (estilo === 'Multipla escolha') {
-                    novaQuestaoHTML += `
-                        <div>
-                            <span><b>Opções:</b></span>
-                            <ol class="questao-opcoes">`;
-
-                    opcoes.forEach((opcao, index) => {
-                        novaQuestaoHTML += `
-                            <li>
-                                <span>${opcao}</span>
-                                <input type="hidden" name="formulario[questao][opcao][${index}]" value="${opcao}">
-                            </li>`;
-                    });
-
-                    novaQuestaoHTML += `</ol></div>`;
-                }
-
-                novaQuestaoHTML += `
+                        </div>
+                        ${estilo === 'Multipla escolha' ? `
+                            <div>
+                                <span><b>Opções:</b></span>
+                                <ol class="questao-opcoes">
+                                    ${opcoes.map((opcao, index) => `
+                                        <li>
+                                            <span>${opcao}</span>
+                                            <input type="hidden" name="formulario[questao][opcao][${index}]" value="${opcao}">
+                                        </li>`).join('')}
+                                </ol>
+                            </div>` : ''}
+                        <button class="btn btn-danger btn-sm d-inline-flex align-items-center" style="width: fit-content; float: right;" data-action="remover-questao">
+                            <i class="bi bi-trash"></i> Remover
+                        </button>
                     </div>
                     <hr>`;
 
@@ -217,7 +211,16 @@
                 $('.div-multipla-escolha').addClass('d-none');
                 $('#estilo-questao').prop('checked', false).trigger('change');
             });
-        });
 
+            $(document).on('click', '[data-action="remover-questao"]', function () {
+                $(this).closest('.questao-div').next('hr').remove();
+                $(this).closest('.questao-div').remove();
+                if ($('.formulario-questoes .questao-div').length === 0) {
+                    $('.formulario-questoes').addClass('d-none');
+                    $('#salvar').addClass('d-none');
+                }
+            });
+
+        });
     </script>
 @endpush

@@ -86,17 +86,37 @@
                     perguntas: []
                 };
 
+                // Verificação se o nome do formulário foi preenchido
+                if(!formulario.nome || formulario.nome.trim() === ''){
+                    await Swal.fire({
+                        icon: 'warning',
+                        title: 'Erro ao salvar formulário',
+                        text: 'O nome do formulário não pode estar vazio.'
+                    });
+                    return;
+                }
+
+                // Loop para capturar as perguntas e suas opções
+                let erroPergunta = false;
                 $('.formulario-questoes .questao-div').each((index, element) => {
                     let tipo = $(element).find('input[name="formulario[tipo]"]').val();
-                    let texto = $(element).find('input[name="formulario[questao]"]').val();
+                    let texto = $(element).find('input[name="formulario[questao]"]').val().trim();
                     let opcoes = [];
 
+                    // Verificação se o texto da pergunta foi preenchido
+                    if (!texto || texto === '') {
+                        erroPergunta = true;
+                        return false; // Para o loop
+                    }
+
+                    // Captura das opções de múltipla escolha, se aplicável
                     if (tipo === 'Multipla escolha') {
                         $(element).find('.questao-opcoes li').each((index, opcaoElement) => {
-                            opcoes.push($(opcaoElement).find('input').val());
+                            opcoes.push($(opcaoElement).find('input').val().trim());
                         });
                     }
 
+                    // Adiciona a pergunta ao formulário
                     formulario.perguntas.push({
                         tipo: tipo,
                         texto: texto,
@@ -104,12 +124,13 @@
                     });
                 });
 
-                if(!formulario.nome || formulario.nome === ''){
+                // Se houver erro na verificação das perguntas
+                if (erroPergunta) {
                     await Swal.fire({
                         icon: 'warning',
                         title: 'Erro ao salvar formulário',
-                        text: 'Formulário preenchido incorretamente'
-                    })
+                        text: 'Todas as perguntas devem ter um texto preenchido.'
+                    });
                     return;
                 }
 
@@ -121,10 +142,10 @@
                         icon: 'error',
                         title: 'Erro ao salvar formulário',
                         text: e.message
-                    })
+                    });
                 }
-            })
-
-        })
+            });
+        });
     </script>
 @endpush
+
