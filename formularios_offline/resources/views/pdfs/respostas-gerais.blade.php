@@ -17,9 +17,13 @@
             font-size: 22px;
         }
         .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             text-align: center;
             font-size: 12px;
-            margin-top: 20px;
+            margin-bottom: 10px;
         }
         .resposta {
             margin-bottom: 20px;
@@ -28,21 +32,30 @@
         .questao {
             margin-bottom: 10px;
         }
+        hr {
+            border: none;
+            border-top: 1px solid #000;
+            margin: 20px 0;
+        }
+        .page-break {
+            page-break-before: always;
+        }
     </style>
 </head>
 <body>
 
 <div class="header">
     <img src="{{ public_path('img/uems_logo.png') }}" alt="Logo">
-    <h1>Formulários Online - UEMS</h1>
-    <p>Relatório de respostas do formulário: <strong>{{ $formulario->nome_formulario }}</strong></p>
-    <p>Data de Geração: {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}</p>
+    <h1>Formulários Offline - UEMS</h1>
+    <p><strong>Relatório geral de respostas do formulário:</strong> {{ $formulario->nome_formulario }}</p>
+    <p><strong>Impressão realizada por:</strong> {{ auth()->user()->nome ?? 'Sistema' }}</p>
+    <p><strong>Data/Hora da impressão:</strong> {{ \Carbon\Carbon::now()->format('d/m/Y H:i:s') }}</p>
 </div>
 
-@foreach($respostas as $respostaAluno)
-    <div class="resposta">
-        <h2>Aluno: {{ $respostaAluno->nome_aluno }}</h2>
-        <p>Data da Resposta: {{ $respostaAluno->created_at->format('d/m/Y H:i') }}</p>
+@foreach($respostas as $index => $respostaAluno)
+    <div class="resposta {{ $index > 0 ? 'page-break' : '' }}">
+        <p class="aluno-info"><strong>Aluno:</strong> {{ $respostaAluno->nome_aluno }}</p>
+        <p><strong>Data da Resposta:</strong> {{ $respostaAluno->created_at->format('d/m/Y H:i') }}</p>
 
         @foreach($formulario->questoes as $questao)
             <div class="questao">
@@ -67,12 +80,13 @@
                     </div>
                 @endif
             </div>
+            <hr>
         @endforeach
     </div>
 @endforeach
 
 <div class="footer">
-    Relatório gerado automaticamente por Formulários Online.
+    Relatório gerado automaticamente por Formulários Offline.
 </div>
 
 </body>

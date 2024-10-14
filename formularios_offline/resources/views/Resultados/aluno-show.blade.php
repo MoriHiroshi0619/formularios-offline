@@ -24,7 +24,7 @@
 
     <div class="row pt-2">
         <div class="col-sm-12">
-            <a href="{{ route('resultado.gerar-pdf', ['formulario' => $formulario->id, 'respostaAluno' => $respostaAluno->id]) }}" class="btn btn-success float-end" target="_blank">
+            <a href="{{ route('resultado.gerar-pdf-aluno', ['formulario' => $formulario->id, 'respostaAluno' => $respostaAluno->id]) }}" class="btn btn-success float-end" target="_blank">
                 <i class="bi bi-file-earmark-pdf"></i> Gerar PDF
             </a>
             <a href="{{ route('resultado.show', $formulario->id) }}" class="btn btn-primary float-end me-2">
