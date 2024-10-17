@@ -37,7 +37,7 @@
                 <tbody>
                 @foreach( $respostas as $resposta )
                     <tr>
-                        <td>{{ $resposta->nome_aluno }}</td>
+                        <td>{{ $resposta->nome_aluno ?? 'Anônimo' }}</td>
                         <td>{{ $resposta->created_at->format('d/m/Y H:i') }}</td>
                         <td class="text-center">
                             <a href="{{ route('resultado.show-aluno', [$formulario->id, $resposta->id]) }}" class="btn btn-primary btn-sm" title="Visualizar Respostas do Aluno">

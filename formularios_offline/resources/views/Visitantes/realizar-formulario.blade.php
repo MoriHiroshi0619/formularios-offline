@@ -26,63 +26,35 @@
                 <div class="card card-body">
                     <h5><strong>Como Preencher o Formulário</strong></h5>
                     <ol>
-                        <li>
-                            <strong>Leia a Pergunta:</strong>
-                        </li>
-                        <p>
-                            Cada pergunta foi formulada para coletar suas opiniões ou informações específicas. Leia com atenção antes de responder.
-                        </p>
-
-                        <li>
-                            <strong>Responda a Pergunta:</strong>
-                        </li>
-                        <p>
-                            Dependendo do tipo de pergunta, você poderá ver campos de <strong>resposta dissertativa</strong> (onde pode escrever livremente) ou opções de <strong>múltipla escolha</strong> (onde você seleciona uma resposta dentre várias opções).
-                        </p>
-
-                        <li>
-                            <strong>Respostas de Múltipla Escolha:</strong>
-                        </li>
-                        <p>
-                            Em perguntas com múltipla escolha, selecione a opção que melhor reflete sua opinião ou situação. Você pode alterar sua escolha enquanto o formulário estiver aberto.
-                        </p>
-
-                        <li>
-                            <strong>Respostas Dissertativas:</strong>
-                        </li>
-                        <p>
-                            Em perguntas dissertativas, utilize o campo de texto para fornecer uma resposta mais detalhada. Lembre-se de ser claro e objetivo.
-                        </p>
-
-                        <li>
-                            <strong>Envio do Formulário:</strong>
-                        </li>
-                        <p>
-                            Ao finalizar, revise suas respostas e clique no botão <button class="btn btn-primary btn-sm">Salvar</button> para salvar suas respostas.
-                        </p>
+                        <li><strong>Leia a Pergunta:</strong></li>
+                        <p>Cada pergunta foi formulada para coletar suas opiniões ou informações específicas. Leia com atenção antes de responder.</p>
+                        <li><strong>Responda a Pergunta:</strong></li>
+                        <p>Dependendo do tipo de pergunta, você verá campos de <strong>resposta dissertativa</strong> ou opções de <strong>múltipla escolha</strong>.</p>
+                        <li><strong>Envio do Formulário:</strong></li>
+                        <p>Ao finalizar, revise suas respostas e clique em <button class="btn btn-primary btn-sm">Salvar</button> para enviar suas respostas.</p>
                     </ol>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row py-2">
-        <div class="col-sm-12">
-            <div class="form-group">
-                <label for="nome_aluno">Nome:</label>
-                <input id="nome_aluno" class="form-control" name="nome_aluno" placeholder="seu sobrenome" value="{{ $respostasSalvas['nome'] ?? '' }}" required>
+    @if(!$formulario->anonimo)
+        <div class="row py-2">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="nome_aluno">Nome:</label>
+                    <input id="nome_aluno" class="form-control" name="nome_aluno" placeholder="Seu nome" value="{{ $respostasSalvas['nome'] ?? '' }}" required>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <div class="mt-4">
         <nav class="pagination-container">
             {{-- Paginação --}}
             <ul class="pagination">
                 <li class="page-item {{ $questoes->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $questoes->previousPageUrl() }}" tabindex="-1">
-                        &laquo;
-                    </a>
+                    <a class="page-link" href="{{ $questoes->previousPageUrl() }}" tabindex="-1">&laquo;</a>
                 </li>
 
                 @for($i = 1; $i <= $questoes->lastPage(); $i++)
@@ -92,9 +64,7 @@
                 @endfor
 
                 <li class="page-item {{ $questoes->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $questoes->nextPageUrl() }}">
-                        &raquo;
-                    </a>
+                    <a class="page-link" href="{{ $questoes->nextPageUrl() }}">&raquo;</a>
                 </li>
             </ul>
         </nav>
@@ -133,7 +103,7 @@
     <div class="row pt-2">
         <div class="col-sm-12">
             <button id="submit" class="btn btn-primary float-end">
-                <i class="bi bi-save"></i> salvar
+                <i class="bi bi-save"></i> Salvar
             </button>
         </div>
     </div>
@@ -164,20 +134,21 @@
                 return respostas;
             }
 
-            // Evento de salvar as respostas quando o formulário é enviado
             $('#submit').click(async () => {
                 let respostas = capturarRespostas();
 
-                if (!respostas.aluno) {
-                    await Swal.fire({
-                        icon: 'error',
-                        title: 'Nome do aluno não informado',
-                        text: 'Por favor, informe seu nome para salvar as respostas',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    return;
-                }
+                @if(!$formulario->anonimo)
+                    if (!respostas.aluno) {
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Nome do aluno não informado',
+                            text: 'Por favor, informe seu nome para salvar as respostas',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        return;
+                    }
+                @endif
 
                 try {
                     let formularioId = '{{ $formulario->id }}';
@@ -207,7 +178,6 @@
                             }
                         }
                     });
-
                 } catch (e) {
                     await Swal.fire({
                         icon: 'error',
@@ -240,4 +210,3 @@
         });
     </script>
 @endpush
-

@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>
-                    Respostas - {{ $formulario->nome_formulario }} ({{ $respostaAluno->nome_aluno }})
+                    Respostas - {{ $formulario->nome_formulario }} - {{ $respostaAluno->nome_aluno ?? 'Anônimo' }}
                     <i class="bi bi-pencil"></i>
                 </h2>
             </div>

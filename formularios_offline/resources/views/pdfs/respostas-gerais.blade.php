@@ -54,7 +54,9 @@
 
 @foreach($respostas as $index => $respostaAluno)
     <div class="resposta {{ $index > 0 ? 'page-break' : '' }}">
-        <p class="aluno-info"><strong>Aluno:</strong> {{ $respostaAluno->nome_aluno }}</p>
+        @if( $respostaAluno->nome_aluno )
+            <p class="aluno-info"><strong>Aluno:</strong> {{ $respostaAluno->nome_aluno }}</p>
+        @endif
         <p><strong>Data da Resposta:</strong> {{ $respostaAluno->created_at->format('d/m/Y H:i') }}</p>
 
         @foreach($formulario->questoes as $questao)

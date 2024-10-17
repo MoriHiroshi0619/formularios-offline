@@ -41,7 +41,7 @@
                     @foreach( $formulariosFinalizados as $formulario )
                         <tr>
                             <td class="text-center">{{ $formulario->id }}</td>
-                            <td class="long-title">{{ $formulario->nome_formulario }}</td>
+                            <td class="long-title">{{ $formulario->nome_formulario ?? 'Anônimo' }}</td>
                             <td class="text-center">{{ $formulario->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
                                 <a href="{{ route('resultado.show', $formulario->id) }}" class="btn btn-primary btn-sm" title="Ver Resultados">

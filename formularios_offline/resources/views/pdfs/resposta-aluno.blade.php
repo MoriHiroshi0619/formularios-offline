@@ -50,7 +50,9 @@
 </div>
 
 <div class="resposta">
-    <p><strong>Aluno:</strong> {{ $respostaAluno->nome_aluno }}</p>
+    @if( $respostaAluno->nome_aluno )
+        <p><strong>Aluno:</strong> {{ $respostaAluno->nome_aluno }}</p>
+    @endif
     <p><strong>Data da Resposta:</strong> {{ $respostaAluno->created_at->format('d/m/Y H:i') }}</p>
 
     <hr>
