@@ -1,7 +1,6 @@
 # TODO ✏️
 - Relatórios PDF, criar um com carater de estastitica, mostrando a porcetagem de resposta para cada opção e para as respostas livre mostrat toas de uma vez.
 (não precisa identificar no relatório o nome do aluno)
-- Mudar migration e regra de negocio pra não ser obrigatório se identificar para responder os formularios. Deixar um check box na criação do formulario para o professor decidir se será anonimo ou não o formulário. Se for ai torna obrigatório prencher o nome para responder
 - Melhorar tela de visitante. 1 - corrigir bug de paginação em pagina que não existe. 2 - botão de salvar some e no lugar deixar o de "Salver e ir pro próximo", ao paginar até a ultima questão ter botão de "revisar antes de enviar" aonde levará para uma tela de revisão aonde o usuario poderá rescvrever as respostas. Só assim poderá enviar as resposstas
 
 # Sistema de Gestão de Formulários Acadêmicos 📋
