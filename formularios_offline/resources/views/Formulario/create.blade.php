@@ -49,24 +49,30 @@
                 <p>
                     Insira as opções de resposta nos campos fornecidos. Lembre-se de que é necessário fornecer <strong>pelo menos duas opções</strong> para perguntas de múltipla escolha.
                     Caso precise de mais opções, clique no botão <button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i></button> para inserir campos adicionais.
-                    Para remover uma opção, clique no botão <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
-                    (Se houver apenas uma opção restante, o campo de texto será limpo, mas a opção não será removida)
+                    Para remover uma opção, clique no botão <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>.
+                    (Se houver apenas uma opção restante, o campo de texto será limpo, mas a opção não será removida).
+                </p>
+
+                <li>
+                    <strong>Formulário Anônimo (Opcional):</strong>
+                </li>
+                <p>
+                    Marque a caixa de seleção <strong>Anônimo</strong> se deseja que o formulário seja respondido de forma anônima. Ao ativar esta opção, os alunos não serão obrigados a fornecer seu nome ao responder. Isso é útil para pesquisas ou formulários em que a privacidade total é necessária.
                 </p>
 
                 <li>
                     <strong>Salvar a Pergunta:</strong>
                 </li>
                 <p>
-                    Depois de preencher todos os campos e opções desejadas, clique no botão <button class="btn btn-primary btn-sm"> Adicionar Pergunta</button>
+                    Depois de preencher todos os campos e opções desejadas, clique no botão <button class="btn btn-primary btn-sm"> Adicionar Pergunta</button>.
                     A pergunta será adicionada à lista de perguntas do formulário exibida abaixo.
                 </p>
-
 
                 <li>
                     <strong>Salvar o Formulário:</strong>
                 </li>
                 <p>
-                    Após adicionar todas as perguntas, clique no botão <button class="btn btn-primary btn-sm"><i class="bi bi-save"></i> Salvar</button> para finalizar a criação.
+                    Após adicionar todas as perguntas e definir as configurações, clique no botão <button class="btn btn-primary btn-sm"><i class="bi bi-save"></i> Salvar</button> para finalizar a criação.
                 </p>
             </ol>
         </div>
@@ -83,6 +89,7 @@
             $(document).on('click', '[data-action="salvar-formulario"]', async () => {
                 let formulario = {
                     nome: $('#nome-formulario').val(),
+                    anonimo: $('#anonimo-formulario').is(':checked'),
                     perguntas: []
                 };
 

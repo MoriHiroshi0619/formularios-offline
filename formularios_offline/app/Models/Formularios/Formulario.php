@@ -18,7 +18,8 @@ class Formulario extends Model
         'nome_formulario',
         'descricao_formulario',
         'liberado_em',
-        'finalizado_em'
+        'finalizado_em',
+        'anonimo'
     ];
 
     const string CRIADO = "CRIADO";

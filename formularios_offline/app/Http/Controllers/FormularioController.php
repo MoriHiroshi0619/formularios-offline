@@ -45,9 +45,9 @@ class FormularioController extends Controller
     {
         try {
             DB::beginTransaction();
-
             $formulario = new Formulario();
             $formulario->nome_formulario = $request->input('formulario.nome');
+            $formulario->anonimo = $request->boolean('formulario.anonimo');
             $formulario->professor()->associate(auth()->user());
             $formulario->save();
 
