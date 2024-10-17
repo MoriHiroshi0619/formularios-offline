@@ -9,7 +9,14 @@
                 </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-2 text-center">
+                <div class="form-group">
+                    <label>Anônimo</label>
+                    <input type="checkbox" id="anonimo-formulario" name="formulario[anonimo]" class="maozinha" style="width: 20px; height: 20px; display: block; margin: 0 auto;">
+                </div>
+            </div>
+
+            <div class="col-sm-2">
                 <!-- Button modal -->
                 <button type="button" class="btn btn-primary float-end mt-2" data-bs-toggle="modal" data-bs-target="#adicionar-pergunta-modal">
                     <i class="bi bi-plus-lg"></i>

@@ -10,7 +10,7 @@ class CriarTabelaFormularioResposta extends Migration
     {
         Schema::create('formulario_resposta', function (Blueprint $table) {
             $table->increments('id');
-            $table->text("nome_aluno")->nullable(false);
+            $table->text("nome_aluno")->nullable(true);
             $table->integer('formulario_id')->unsigned()->nullable(false);
             $table->foreign('formulario_id')->references('id')->on('formularios_formulario');
             $table->timestamps();
