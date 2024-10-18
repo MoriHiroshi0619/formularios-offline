@@ -22,3 +22,4 @@ public/css/fonts.css
 public/fonts/*
 public/js/app.js
 public/js/app.js.LICENSE.txt
+.DS_Store
