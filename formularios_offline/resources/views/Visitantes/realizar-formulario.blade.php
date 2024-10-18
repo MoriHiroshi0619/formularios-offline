@@ -194,6 +194,8 @@
                 e.preventDefault();
                 let respostas = capturarRespostas();
 
+                if(e?.target?.classList.contains('disabled')) return null
+
                 try {
                     if (respostas) await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', { resposta: respostas });
                     window.location.href = $(e.target).attr('href');
