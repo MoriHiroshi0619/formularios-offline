@@ -1,7 +1,7 @@
 # TODO ✏️
 - Relatórios PDF, criar um com carater de estastitica, mostrando a porcetagem de resposta para cada opção e para as respostas livre mostrat toas de uma vez.
 (não precisa identificar no relatório o nome do aluno)
-- Melhorar tela de visitante. 1 - corrigir bug de paginação em pagina que não existe. 2 - botão de salvar some e no lugar deixar o de "Salver e ir pro próximo", ao paginar até a ultima questão ter botão de "revisar antes de enviar" aonde levará para uma tela de revisão aonde o usuario poderá rescvrever as respostas. Só assim poderá enviar as resposstas
+- Melhorar tela de visitante... botão de salvar some e no lugar deixar o de "Salver e ir pro próximo", ao paginar até a ultima questão ter botão de "revisar antes de enviar" aonde levará para uma tela de revisão aonde o usuario poderá rescvrever as respostas. Só assim poderá enviar as resposstas
 
 # Sistema de Gestão de Formulários Acadêmicos 📋
 
