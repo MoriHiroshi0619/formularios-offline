@@ -86,7 +86,7 @@
     <script type="application/javascript">
         $(document).ready( () => {
 
-            $(document).on('click', '[data-action="salvar-formulario"]', async () => {
+            $(document).on('click', '[data-action="salvar-formulario"]', async (e) => {
                 let formulario = {
                     nome: $('#nome-formulario').val(),
                     anonimo: $('#anonimo-formulario').is(':checked'),
@@ -142,9 +142,17 @@
                 }
 
                 try {
+                    if($('[data-action="salvar-formulario"]').attr('disabled') === 'disabled') return;
+
+                    $('[data-action="salvar-formulario"]').attr('disabled', 'disabled');
+                    $('.div-salvar').addClass('d-none');
+                    $('.div-carregar').removeClass('d-none');
                     await axios.post('{{ route('formulario.store') }}', { formulario })
                     window.location.href = '{{ route('formulario.index') }}';
                 }catch (e) {
+                    $('[data-action="salvar-formulario"]').removeAttr('disabled');
+                    $('.div-salvar').removeClass('d-none');
+                    $('.div-carregar').addClass('d-none');
                     await Swal.fire({
                         icon: 'error',
                         title: 'Erro ao salvar formulário',

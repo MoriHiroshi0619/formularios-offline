@@ -92,8 +92,14 @@
         <div id="salvar" class="row d-none">
             <div class="col-sm-12">
                 <button type="submit" class="btn btn-primary float-end" data-action="salvar-formulario">
-                    <i class="bi bi-save"></i>
-                    Salvar
+                    <div class="div-salvar">
+                        <i class="bi bi-save"></i>
+                        Salvar
+                    </div>
+                    <div class="d-none d-flex justify-content-center align-items-center gap-2 div-carregar">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Salvando...
+                    </div>
                 </button>
             </div>
         </div>
