@@ -49,27 +49,6 @@
         </div>
     @endif
 
-    <div class="mt-4">
-        <nav class="pagination-container">
-            {{-- Paginação --}}
-            <ul class="pagination">
-                <li class="page-item {{ $questoes->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $questoes->previousPageUrl() }}" tabindex="-1">&laquo;</a>
-                </li>
-
-                @for($i = 1; $i <= $questoes->lastPage(); $i++)
-                    <li class="page-item {{ $i == $questoes->currentPage() ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $questoes->url($i) }}">{{ $i }}</a>
-                    </li>
-                @endfor
-
-                <li class="page-item {{ $questoes->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $questoes->nextPageUrl() }}">&raquo;</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
     <div class="card mt-1">
         <div class="card-body">
             @foreach($questoes as $questao)
@@ -100,19 +79,45 @@
         </div>
     </div>
 
-    <div class="row pt-2">
-        <div class="col-sm-12">
-            <button id="submit" class="btn btn-primary float-end">
-                <i class="bi bi-save"></i> Salvar
-            </button>
-        </div>
+    <div class="mt-4">
+        <nav class="pagination-container">
+            {{-- Paginação --}}
+            <ul class="pagination">
+                <li class="page-item {{ $questoes->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $questoes->previousPageUrl() }}" tabindex="-1">&laquo;</a>
+                </li>
+
+                @for($i = 1; $i <= $questoes->lastPage(); $i++)
+                    <li class="page-item {{ $i == $questoes->currentPage() ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $questoes->url($i) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+
+                <li class="page-item {{ $questoes->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $questoes->nextPageUrl() }}">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+
+    <div class="w-100 d-flex justify-content-center align-items-center">
+        @if( $questoes->hasMorePages() )
+            <button id="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Salvar e ir para o próximo
+            </button>
+        @else
+            <button id="review" class="btn btn-success">
+                <i class="bi bi-eye"></i> Revisar antes de enviar
+            </button>
+        @endif
+    </div>
+
 @endsection
 
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(() => {
-            // Função para capturar todas as respostas da página atual
+            // Função para capturar as respostas da página atual
             function capturarRespostas() {
                 let respostas = {
                     aluno: $('#nome_aluno').val(),
@@ -134,50 +139,27 @@
                 return respostas;
             }
 
+            // Função para salvar a resposta e ir para a próxima página
             $('#submit').click(async () => {
                 let respostas = capturarRespostas();
 
                 @if(!$formulario->anonimo)
-                    if (!respostas.aluno) {
-                        await Swal.fire({
-                            icon: 'error',
-                            title: 'Nome do aluno não informado',
-                            text: 'Por favor, informe seu nome para salvar as respostas',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        return;
-                    }
+                if (!respostas.aluno) {
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Nome do aluno não informado',
+                        text: 'Por favor, informe seu nome para salvar as respostas',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    return;
+                }
                 @endif
 
-                try {
+                    try {
                     let formularioId = '{{ $formulario->id }}';
                     await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', { resposta: respostas });
-
-                    Swal.fire({
-                        title: "Deseja enviar suas respostas agora?",
-                        text: "Por favor, verifique se todos os campos foram preenchidos",
-                        icon: "question",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Sim, enviar respostas!",
-                        cancelButtonText: "Cancelar",
-                        reverseButtons: true
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            try {
-                                await axios.post('{{ route('visitantes.formularios.store') }}', { formulario: formularioId, aluno: respostas.aluno });
-                                window.location.href = '{{ route('visitantes.formularios.index') }}';
-                            } catch (e) {
-                                await Swal.fire({
-                                    icon: 'error',
-                                    title: 'Erro ao enviar respostas',
-                                    text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
-                                });
-                            }
-                        }
-                    });
+                    window.location.href = '{{ $questoes->nextPageUrl() }}';
                 } catch (e) {
                     await Swal.fire({
                         icon: 'error',
@@ -189,16 +171,13 @@
                 }
             });
 
-            // Evento de navegação entre páginas de questões
-            $('body').on('click', '.page-item', async (e) => {
-                e.preventDefault();
+            // Evento para revisar todas as respostas
+            $('#review').click(async () => {
                 let respostas = capturarRespostas();
-
-                if(e?.target?.classList.contains('disabled')) return null
-
                 try {
-                    if (respostas) await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', { resposta: respostas });
-                    window.location.href = $(e.target).attr('href');
+                    let formularioId = '{{ $formulario->id }}';
+                    await axios.post('{{ route('visitantes.salvar-questao-sessao', $formulario->id) }}', { resposta: respostas });
+                    window.location.href = '{{ route('visitantes.revisar-formulario', $formulario->id) }}';
                 } catch (e) {
                     await Swal.fire({
                         icon: 'error',
@@ -210,5 +189,6 @@
                 }
             });
         });
+
     </script>
 @endpush

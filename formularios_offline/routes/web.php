@@ -13,7 +13,7 @@ Route::prefix('visitantes')->name('visitantes.')->group(function () {
     Route::resource('formularios', \App\Http\Controllers\VisitanteFormularioController::class);
     Route::get('realizar-formulario/{formularioId}', [\App\Http\Controllers\VisitanteFormularioController::class, 'realizarFormulario'])->name('realizar-formulario');
     Route::post('salvar-questao-sessao/${id}', [\App\Http\Controllers\VisitanteFormularioController::class, 'salvarRespostasNaSessao'])->name('salvar-questao-sessao');
-
+    Route::get('revisar-formulario/{formularioId}', [\App\Http\Controllers\VisitanteFormularioController::class, 'revisarFormulario'])->name('revisar-formulario');
 //    Route::get('limpar', [\App\Http\Controllers\VisitanteFormularioController::class, 'limparSessao'])->name('limpar');
 });
 
