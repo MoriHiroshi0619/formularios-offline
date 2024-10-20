@@ -123,4 +123,15 @@ class VisitanteFormularioController extends Controller
             return response()->json(['error' => 'Erro ao tentar salvar a resposta'], 500);
         }
     }
+
+    public function revisarFormulario($formularioId)
+    {
+        $formulario = Formulario::with('questoes.opcoesMultiplasEscolhas')->findOrFail($formularioId);
+
+        $respostasSalvas = session()->get('respostas.' . $formularioId, []);
+
+        return view('visitantes.revisar-formulario', compact('formulario', 'respostasSalvas'));
+    }
+
+
 }
