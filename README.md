@@ -1,8 +1,3 @@
-# TODO ✏️
-- Relatórios PDF, criar um com carater de estastitica, mostrando a porcetagem de resposta para cada opção e para as respostas livre mostrat toas de uma vez.
-(não precisa identificar no relatório o nome do aluno)
-- Melhorar tela de visitante... botão de salvar some e no lugar deixar o de "Salver e ir pro próximo", ao paginar até a ultima questão ter botão de "revisar antes de enviar" aonde levará para uma tela de revisão aonde o usuario poderá rescvrever as respostas. Só assim poderá enviar as resposstas
-
 # Sistema de Gestão de Formulários Acadêmicos 📋
 
 Este é um projeto desenvolvido como parte de uma extensão da **Universidade Estadual de Mato Grosso do Sul (UEMS)**. O objetivo é criar um sistema de gerenciamento de formulários acadêmicos, permitindo que professores criem e avaliem questionários com diferentes tipos de perguntas (múltipla escolha e dissertativas). O sistema foi pensado para ser utilizado em ambientes sem conexão com a internet, rodando em **intranet**, sendo uma solução ideal para atividades extensionistas em regiões com acesso limitado à internet.
