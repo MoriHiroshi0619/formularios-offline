@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formularios\Formulario;
+use App\Models\Formularios\FormularioQuestao;
 use App\Models\Respostas\FormularioResposta;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -68,6 +69,41 @@ class ResultadoController extends Controller
 
         $pdf = Pdf::loadView('pdfs.respostas-gerais', compact('formulario', 'respostas'));
         return $pdf->stream('respostas-formulario-' . $formularioId . '.pdf');
+    }
+
+    public function gerarRelatorioEstatistico(Request $request, $formularioId)
+    {
+        $formulario = Formulario::with('questoes.opcoesMultiplasEscolhas')->findOrFail($formularioId);
+        $respostas = FormularioResposta::with('respostas')->where('formulario_id', $formularioId)->get();
+
+        $estatisticas = [];
+        $respostasTexto = [];
+
+        foreach ($formulario->questoes as $questao) {
+            if ($questao->tipo === 'MULTIPLA_ESCOLHA') {
+                foreach ($questao->opcoesMultiplasEscolhas as $opcao) {
+                    $estatisticas[$questao->id][$opcao->id] = 0;
+                }
+            } elseif ($questao->tipo === 'TEXTO_LIVRE') {
+                $respostasTexto[$questao->id] = [];
+            }
+        }
+
+        foreach ($respostas as $resposta) {
+            foreach ($resposta->respostas as $respostaQuestao) {
+                if ($respostaQuestao->questao->tipo === FormularioQuestao::MULTIPLA_ESCOLHA) {
+                    if (isset($estatisticas[$respostaQuestao->questao_id][$respostaQuestao->resposta_id])) {
+                        $estatisticas[$respostaQuestao->questao_id][$respostaQuestao->resposta_id]++;
+                    }
+                } elseif ($respostaQuestao->questao->tipo === FormularioQuestao::TEXTO_LIVRE) {
+                    $respostasTexto[$respostaQuestao->questao_id][] = $respostaQuestao->resposta;
+                }
+            }
+        }
+
+        $pdf = PDF::loadView('pdfs.relatorio-estatistico', compact('formulario', 'estatisticas', 'respostasTexto'));
+
+        return $pdf->stream('estatisticas-formulario-' . $formularioId . '.pdf');
     }
 
 }

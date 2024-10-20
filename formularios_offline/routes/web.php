@@ -38,4 +38,5 @@ Route::middleware(['auth', 'professor'])->group(function () {
     Route::get('resultado/{formularioId}/resposta/{respostaId}', [\App\Http\Controllers\ResultadoController::class, 'showAluno'])->name('resultado.show-aluno');
     Route::get('resultado/{formulario}/aluno/{respostaAluno}/gerar-pdf', [\App\Http\Controllers\ResultadoController::class, 'gerarPDF'])->name('resultado.gerar-pdf-aluno');
     Route::get('resultado/{formulario}/pdf', [\App\Http\Controllers\ResultadoController::class, 'gerarPdfRespostas'])->name('resultado.gerar-pdf-geral');
+    Route::get('relatorio/{formulario}/pdf', [\App\Http\Controllers\ResultadoController::class, 'gerarRelatorioEstatistico'])->name('resultado.gerar-relatorio');
 });

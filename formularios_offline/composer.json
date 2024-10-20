@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.3",
         "barryvdh/laravel-dompdf": "^2.2",
+        "chartpdf/chartpdf": "^0.0.6",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
