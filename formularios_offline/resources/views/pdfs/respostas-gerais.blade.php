@@ -47,7 +47,7 @@
 <div class="header">
     <img src="{{ public_path('img/uems_logo.png') }}" alt="Logo">
     <h1>Formulários Offline - UEMS</h1>
-    <p><strong>Relatório geral de respostas do formulário:</strong> {{ $formulario->nome_formulario }}</p>
+    <p><strong>Relatório geral de respostas dos alunos do formulário:</strong> {{ $formulario->nome_formulario }}</p>
     <p><strong>Impressão realizada por:</strong> {{ auth()->user()->nome ?? 'Sistema' }}</p>
     <p><strong>Data/Hora da impressão:</strong> {{ \Carbon\Carbon::now()->format('d/m/Y H:i:s') }}</p>
 </div>

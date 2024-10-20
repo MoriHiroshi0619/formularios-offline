@@ -18,7 +18,10 @@
                 </h2>
 
                 <a href="{{ route('resultado.gerar-pdf-geral', $formulario->id) }}" class="btn btn-success float-end" target="_blank">
-                    <i class="bi bi-file-earmark-pdf"></i> Gerar PDF
+                   <i class="bi bi-file-earmark-pdf"></i> Gerar relatório de alunos PDF
+                </a>
+                <a href="{{ route('resultado.gerar-relatorio', $formulario->id) }}" class="btn btn-success float-end" target="_blank">
+                    <i class="bi bi-file-earmark-pdf"></i> Gerar relatório estatístico PDF
                 </a>
             </div>
         </div>
