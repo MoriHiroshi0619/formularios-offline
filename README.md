@@ -10,56 +10,77 @@ Este sistema foi criado para permitir que professores de instituições de ensin
 
 - **Laravel 8**: Framework PHP para o desenvolvimento do backend.
 - **Bootstrap 5**: Framework CSS para estilização e responsividade.
-- **PostgreSQL**: Banco de dados relacional utilizado para armazenar as informações.
+- **PostgreSQL 16.4**: Banco de dados relacional utilizado para armazenar as informações.
 - **Composer**: Gerenciador de dependências do PHP.
+- **Node.js**: Ambiente de execução JavaScript para o frontend.
+- **Docker**: Plataforma para criação e gerenciamento de contêineres.
+- **Docker Compose**: Ferramenta para definir e executar aplicativos Docker multi-contêiner.
 
 ## Instalação e Configuração ⚙️
 
-Siga os passos abaixo para instalar o projeto localmente:
+Siga os passos abaixo para instalar o projeto localmente usando Docker:
 
 ### Pré-requisitos
 
-- **PHP >= 7.4**
-- **Composer**
-- **Node.js e NPM**
-- **PostgreSQL**
+- **Docker** instalado na máquina.
+- **Docker Compose** instalado.
+- **Git** para clonar o repositório.
+
+> **Nota:** Certifique-se de que o Docker e o Docker Compose estão instalados e funcionando corretamente em seu sistema antes de iniciar. Para instalar o Docker, acesse [Docker Desktop](https://www.docker.com/products/docker-desktop) ou [Docker Engine](https://docs.docker.com/engine/install/), dependendo do seu sistema operacional.
 
 ### Passos para Instalação
 
-1. Clone o repositório:
+1. **Clone o repositório:**
+
    ```bash
-   git clone git@github.com:MoriHiroshi0619/formularios-offline.git
+   git clone https://github.com/MoriHiroshi0619/formularios-offline.git
    cd formularios-offline
-2. Instale as dependências do PHP e JavaScript:
-   ```bash
-   composer install
-   npm install  
-3. Crie um arquivo `.env`:
+
+2. Crie um arquivo `.env`:
    ```bash
    cp .env.example .env
-4. Configure as variáveis de ambiente no arquivo `.env` para o banco de dados:
+   
+3. Inicie os contêineres Docker:
    ```bash
-    DB_CONNECTION=pgsql
-    DB_HOST=127.0.0.1
-    DB_PORT=5432
-    DB_DATABASE=nome_do_banco
-    DB_USERNAME=usuario
-    DB_PASSWORD=senha
+    docker-compose up --build
+   
+4. Instale as dependências do PHP e do Node.js:
+   ```bash
+   docker-compose exec app composer install
+   docker-compose exec app npm install
+   
 5. Gere a chave da aplicação Laravel:
    ```bash
-   php artisan key:generate  
-6. Execute as migrações
+   docker-compose exec app php artisan key:generate
+   
+6. Execute as migrações do banco de dados:
    ```bash
-   php artisan migrate
-7. (Opcional) Rode o seeder para criar dados fictícios:
+   docker-compose exec app php artisan migrate
+
+7. Compile os assets do frontend:
    ```bash
-   php artisan db:seed
-8. Compile os assets do frontend:
+   docker-compose exec app npm run dev
+
+8. Crie um usuário administrador (comando solicitará o nome, CPF e senha do usuário):
    ```bash
-   npm run dev
-9. Inicie o servidor local: 
+   docker-compose exec app php artisan user:admin-custom
+
+9. Acesse a aplicação no navegador:
    ```bash
-   php artisan serve
+   http://localhost:8080
+
+### Observações 📝
+- Dependências: Todo o ambiente necessário para executar o projeto está encapsulado em contêineres Docker. Não é necessário instalar PHP, Composer, Node.js ou PostgreSQL na sua máquina local.
+- Volumes Persistentes: Os dados do banco de dados são persistidos usando volumes do Docker, garantindo que as informações não sejam perdidas ao reiniciar os contêineres.
+
+#### Comandos Úteis:
+1. Acessar o contêiner do aplicativo:
+   ```bash
+   docker-compose exec app bash
+2. Visualizar logs:
+   ```bash
+   docker-compose logs -f 
+
 #### Projeto desenvolvido como parte de uma iniciativa acadêmica da Universidade Estadual de Mato Grosso do Sul (UEMS)
 
 
