@@ -23,10 +23,11 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
 ### Pré-requisitos
 
 - **Docker** instalado na máquina.
-- **Docker Compose** instalado.
 - **Git** para clonar o repositório.
 
-> **Nota:** Certifique-se de que o Docker e o Docker Compose estão instalados e funcionando corretamente em seu sistema antes de iniciar. Para instalar o Docker, acesse [Docker Desktop](https://www.docker.com/products/docker-desktop) ou [Docker Engine](https://docs.docker.com/engine/install/), dependendo do seu sistema operacional.
+> **Nota:** Para instalar o Docker, acesse [Docker Desktop](https://www.docker.com/products/docker-desktop) ou [Docker Engine](https://docs.docker.com/engine/install/), dependendo do seu sistema operacional.
+
+> **Nota:** Para instalar o git, acesse [Git](https://git-scm.com/downloads)
 
 ### Passos para Instalação
 
@@ -68,6 +69,19 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
 9. Acesse a aplicação no navegador:
    ```bash
    http://localhost:8080
+
+### Iniciando e parando os contêineres Docker
+Sempre que for utilizar a aplicação, será necessario executar os seguintes comandos no terminal no diretório do projeto.
+
+1. Iniciando os contêineres. (o `-d` executa o processo em segundo plano no terminal)
+   ```bash
+   docker compose up -d
+   ```
+2. Parando os contêineres
+   ```bash
+   docker compose down
+
+> **Atenção:** Certifique-se de que o Docker esteja inicializado no seu sistema antes de tentar executar qualquer comando Docker. 
 
 ### Observações 📝
 - Dependências: Todo o ambiente necessário para executar o projeto está encapsulado em contêineres Docker. Não é necessário instalar PHP, Composer, Node.js ou PostgreSQL na sua máquina local.
