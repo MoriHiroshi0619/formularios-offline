@@ -20,7 +20,9 @@ class VisitanteFormularioController extends Controller
 
         $formularios = Formulario::query()
             ->where('status', Formulario::LIBERADO)
-            ->whereNotIn('id', $formulariosRespondidos)
+            ->when($formulariosRespondidos, fn ($query, $formulariosRespondidos) =>
+                $query->whereNotIn('id', $formulariosRespondidos)
+            )
             ->with('professor')
             ->paginate(10);
 
