@@ -48,8 +48,11 @@
 <body>
 
 <div class="header">
-    <img src="{{ public_path('img/uems_logo.png') }}" alt="Logo">
-    <h1>Formulários Offline - UEMS</h1>
+    {{--todo: Eu tentei !! Por algum motivo o plugin DomPdf não está imprimindo imagens quando no contaienr docker--}}
+    {{--todo: Tentei imprimir por todas formas, public path, asset, caminho absoluto, url--}}
+    {{--<img src="{{ public_path('img/uems_logo.png') }}" alt="Logo">--}}
+    <h4>Universidade Estadual de Mato Grosso do Sul</h4>
+    <h1>Formulários Offline</h1>
     <p><strong>Relatório geral estático do formulário:</strong> {{ $formulario->nome_formulario }}</p>
     <p><strong>Impressão realizada por:</strong> {{ auth()->user()->nome ?? 'Sistema' }}</p>
     <p><strong>Data/Hora da impressão:</strong> {{ \Carbon\Carbon::now()->format('d/m/Y H:i:s') }}</p>
@@ -82,7 +85,7 @@
 @endforeach
 
 <div class="footer">
-    Relatório gerado automaticamente por Formulários Offline.
+    Relatório gerado automaticamente por Formulários Offline - UEMS.
 </div>
 
 </body>

@@ -14,9 +14,16 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libwebp-dev \
     libxpm-dev \
+    libxml2-dev \
+    libssl-dev \
     unzip \
     git \
     curl \
+    fonts-liberation \
+    fonts-dejavu \
+    fontconfig \
+    libicu-dev \
+    && docker-php-ext-install intl \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensões PHP necessárias
