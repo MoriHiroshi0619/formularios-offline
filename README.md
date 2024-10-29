@@ -47,24 +47,24 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
    
 4. Instale as dependências do PHP e do Node.js:
    ```bash
-   docker-compose exec app composer install
-   docker-compose exec app npm install
+   docker compose exec app composer install
+   docker compose exec app npm install
    
 5. Gere a chave da aplicação Laravel:
    ```bash
-   docker-compose exec app php artisan key:generate
+   docker compose exec app php artisan key:generate
    
 6. Execute as migrações do banco de dados:
    ```bash
-   docker-compose exec app php artisan migrate
+   docker compose exec app php artisan migrate
 
 7. Compile os assets do frontend:
    ```bash
-   docker-compose exec app npm run dev
+   docker compose exec app npm run dev
 
 8. Crie um usuário administrador (comando solicitará o nome, CPF e senha do usuário):
    ```bash
-   docker-compose exec app php artisan user:admin-custom
+   docker compose exec app php artisan user:admin-custom
 
 9. Acesse a aplicação no navegador:
    ```bash
@@ -90,10 +90,10 @@ Sempre que for utilizar a aplicação, será necessario executar os seguintes co
 #### Comandos Úteis:
 1. Acessar o contêiner do aplicativo:
    ```bash
-   docker-compose exec app bash
+   docker compose exec laravel_app bash
 2. Visualizar logs:
    ```bash
-   docker-compose logs -f 
+   docker compose logs -f 
 
 #### Projeto desenvolvido como parte de uma iniciativa acadêmica da Universidade Estadual de Mato Grosso do Sul (UEMS)
 
