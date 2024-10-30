@@ -6,7 +6,7 @@ use App\Models\Formularios\Formulario;
 use App\Models\Formularios\FormularioQuestao;
 use App\Models\Formularios\MultiplaEscolha;
 use App\Models\Respostas\FormularioResposta;
-use App\Models\Respostas\resposta;
+use App\Models\Respostas\Resposta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Psr\Container\ContainerExceptionInterface;
@@ -53,7 +53,7 @@ class VisitanteFormularioController extends Controller
             collect($respostas[$formularioID])->each(function ($resposta, $questaoId) use ($formularioResposta) {
                 if ($questaoId === 'nome') return null;
 
-                $respostaModel = new resposta();
+                $respostaModel = new Resposta();
                 $respostaModel->questao()->associate($questaoId);
                 $respostaModel->formularioResposta()->associate($formularioResposta);
 
@@ -132,7 +132,7 @@ class VisitanteFormularioController extends Controller
 
         $respostasSalvas = session()->get('respostas.' . $formularioId, []);
 
-        return view('visitantes.revisar-formulario', compact('formulario', 'respostasSalvas'));
+        return view('Visitantes.revisar-formulario', compact('formulario', 'respostasSalvas'));
     }
 
 
