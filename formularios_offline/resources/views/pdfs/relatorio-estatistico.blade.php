@@ -48,9 +48,7 @@
 <body>
 
 <div class="header">
-    {{--todo: Eu tentei !! Por algum motivo o plugin DomPdf não está imprimindo imagens quando no contaienr docker--}}
-    {{--todo: Tentei imprimir por todas formas, public path, asset, caminho absoluto, url--}}
-    {{--<img src="{{ public_path('img/uems_logo.png') }}" alt="Logo">--}}
+    <img src="{{ public_path('img/uems_logo_comprimido.png') }}" alt="Logo">
     <h4>Universidade Estadual de Mato Grosso do Sul</h4>
     <h1>Formulários Offline</h1>
     <p><strong>Relatório geral estático do formulário:</strong> {{ $formulario->nome_formulario }}</p>
