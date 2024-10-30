@@ -7,7 +7,7 @@ use App\Models\Formularios\MultiplaEscolha;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class resposta extends Model
+class Resposta extends Model
 {
     use SoftDeletes;
 

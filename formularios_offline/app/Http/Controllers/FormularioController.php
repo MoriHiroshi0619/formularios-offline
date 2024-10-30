@@ -32,13 +32,13 @@ class FormularioController extends Controller
 
         $formularios = $query->orderBy('id', 'desc')->paginate(10);
 
-        return view('formulario.index', compact('formularios'));
+        return view('Formulario.index', compact('formularios'));
     }
 
 
     public function create()
     {
-        return view('formulario.create');
+        return view('Formulario.create');
     }
 
     public function store(Request $request)
