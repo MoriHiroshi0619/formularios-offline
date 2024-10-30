@@ -37,13 +37,15 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
    git clone https://github.com/MoriHiroshi0619/formularios-offline.git
    cd formularios-offline
 
+> **Nota:** Certifique-se que os comandos executados a partir daqui, sejam executados a partir do root do projeto laravel 
+
 2. Crie um arquivo `.env`:
    ```bash
    cp .env.example .env
    
 3. Inicie os contêineres Docker:
    ```bash
-    docker-compose up --build
+    docker compose up --build -d
    
 4. Instale as dependências do PHP e do Node.js:
    ```bash
