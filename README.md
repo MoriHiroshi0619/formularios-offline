@@ -35,6 +35,9 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
 
    ```bash
    git clone https://github.com/MoriHiroshi0619/formularios-offline.git
+   ```
+   Acesse o diretório
+   ```bash
    cd formularios-offline
 
 > **Nota:** Certifique-se que os comandos executados a partir daqui, sejam executados a partir do root do projeto laravel 
@@ -48,29 +51,34 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
     docker compose up --build -d
    
 4. Instale as dependências do PHP e do Node.js:
+   Dependências do PHP
    ```bash
    docker compose exec app composer install
+   ```
+   Dependências do Node.js
+   ```
    docker compose exec app npm install
-   
-5. Gere a chave da aplicação Laravel:
+   ```
+6. Gere a chave da aplicação Laravel:
    ```bash
    docker compose exec app php artisan key:generate
    
-6. Execute as migrações do banco de dados:
+7. Execute as migrações do banco de dados:
    ```bash
    docker compose exec app php artisan migrate
 
-7. Compile os assets do frontend:
+8. Compile os assets do frontend:
    ```bash
    docker compose exec app npm run dev
 
-8. Crie um usuário administrador (comando solicitará o nome, CPF e senha do usuário):
+9. Crie um usuário administrador (comando solicitará o nome, CPF e senha do usuário):
    ```bash
    docker compose exec app php artisan user:admin-custom
 
-9. Acesse a aplicação no navegador:
+10. Acesse a aplicação no navegador:
    ```bash
    http://localhost:8080
+   ```
 
 ### Iniciando e parando os contêineres Docker
 Sempre que for utilizar a aplicação, será necessario executar os seguintes comandos no terminal no diretório do projeto.
