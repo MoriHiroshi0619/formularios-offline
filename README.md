@@ -80,6 +80,8 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
    http://localhost:8080
    ```
 
+> **Nota:** Se ao abrir o navegador exibir uma mensagem de acesso negado, rode o seguinte comando `sudo chmod 777 -R ./storage` 
+
 ### Iniciando e parando os contêineres Docker
 Sempre que for utilizar a aplicação, será necessario executar os seguintes comandos no terminal no diretório do projeto.
 
