@@ -43,7 +43,7 @@ class VisitanteFormularioController extends Controller
                 ->where('status', Formulario::LIBERADO)
                 ->firstOrFail();
 
-            $nome =  data_get($respostas, $formularioID.'.nome', $request->input('aluno'));
+            $nome = data_get($respostas, $formularioID.'.nome', $request->input('aluno'));
 
             $formularioResposta = new FormularioResposta();
             $formularioResposta->fill(['nome_aluno' => $nome]);
@@ -52,6 +52,7 @@ class VisitanteFormularioController extends Controller
 
             collect($respostas[$formularioID])->each(function ($resposta, $questaoId) use ($formularioResposta) {
                 if ($questaoId === 'nome') return null;
+                else if (is_string($questaoId)) return null;
 
                 $respostaModel = new Resposta();
                 $respostaModel->questao()->associate($questaoId);
