@@ -31,6 +31,7 @@ Route::middleware(['auth', 'professor'])->group(function () {
     Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 
     Route::resource('formulario', \App\Http\Controllers\FormularioController::class);
+    Route::post('formulario/replicar/{id}', [\App\Http\Controllers\FormularioController::class, 'replicar'])->name('replicar-formulario');
     Route::put('formulario/liberar/{id}', [\App\Http\Controllers\FormularioController::class, 'liberarFormulario'])->name('liberar-formulario');
     Route::put('formulario/encerrar/{id}', [\App\Http\Controllers\FormularioController::class, 'encerrarFormulario'])->name('encerrar-formulario');
 

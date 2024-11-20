@@ -93,6 +93,37 @@ class FormularioController extends Controller
         }
     }
 
+    public function replicar(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $formularioParaReplicar = Formulario::query()->findOrFail($id);
+            $formulario = $formularioParaReplicar->replicate(["status"]);
+            $formulario->status = Formulario::CRIADO;
+            $formulario->save();
+
+            $formularioParaReplicar->questoes->each(function ($questao) use ($formulario) {
+                $questaoReplicada = $questao->replicate();
+                $questaoReplicada->formulario()->associate($formulario);
+                $questaoReplicada->save();
+
+                if ($questao->tipo === 'MULTIPLA_ESCOLHA') {
+                    $questao->opcoesMultiplasEscolhas->each(function ($opcao) use ($questaoReplicada) {
+                        $opcaoReplicada = $opcao->replicate();
+                        $opcaoReplicada->questao()->associate($questaoReplicada);
+                        $opcaoReplicada->save();
+                    });
+                }
+            });
+            DB::commit();
+            session()->flash('success', 'Formulário replicado com sucesso!');
+            return response()->noContent();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Erro ao tentar replicar o formulário'], 500);
+        }
+    }
+
     public function show($formularioId)
     {
         $formulario = Formulario::query()
