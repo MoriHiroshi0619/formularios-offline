@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>
-                    Formalários
+                    Formulários
                     <i class="bi bi-receipt"></i>
                 </h2>
 
@@ -69,6 +69,7 @@
                         <th>Nome</th>
                         <th>Qtd. Questões</th>
                         <th>Status</th>
+                        <th>Anônimo</th>
                         <th>Criado em</th>
                         <th>Ações</th>
                     </tr>
@@ -80,13 +81,17 @@
                             <td class="long-title">{{ $formulario->nome_formulario }}</td>
                             <td class="text-center">{{ $formulario->questoes->count() }}</td>
                             <td class="text-center">{{ $formulario->status }}</td>
+                            <td class="text-center">{{ $formulario->anonimo ? 'Sim' : 'Não'}}</td>
                             <td class="text-center">{{ $formulario->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
                                 <div class="d-flex gap-1 align-items-center justify-content-evenly flex-sm-wrap">
-                                    <a href="{{ route('formulario.show', $formulario->id) }}" class="btn btn-primary btn-sm" title="Visualizar Formulario">
+                                    <a href="{{ route('formulario.show', $formulario->id) }}" class="btn btn-outline-primary btn-sm" title="Visualizar Formulario">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <button class="btn btn-danger btn-sm" data-action="deletar-formulario" data-id="{{ $formulario->id }}" title="Deletar Formulario">
+                                    <button class="btn btn-outline-success btn-sm" data-action="replicar-formulario" data-id="{{ $formulario->id }}" title="Replicar Formulario">
+                                        <i class="bi bi-copy"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" data-action="deletar-formulario" data-id="{{ $formulario->id }}" title="Deletar Formulario">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -154,6 +159,33 @@
                 });
             })
 
+            $('[data-action="replicar-formulario"]').on('click', (e) => {
+                let id = $(e.target).closest('button').data('id');
+                Swal.fire({
+                    title: "Replicar Formulário?",
+                    html: "<span>Ao fazer isso, criará um novo formulário com as mesmas questões do formulário atual.</span>" +
+                        "<br><span style='color: coral'>(Atenção: não será copiado as respostas dos alunos)</span>",
+                    icon: "warning",
+                    showCancelButton: true,
+                    cancelButtonColor: "#a6a6a6",
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#0e5e02",
+                    confirmButtonText: "Replicar!",
+                    reverseButtons: true
+                }).then( async (result) => {
+                    if (!result.isConfirmed) return;
+                    try{
+                        await axios.post(`/formulario/replicar/${id}`);
+                        window.location.reload();
+                    }catch (e) {
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao replicar formulário',
+                            text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
+                        })
+                    }
+                });
+            })
         })
     </script>
 @endpush
