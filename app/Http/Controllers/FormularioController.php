@@ -23,7 +23,7 @@ class FormularioController extends Controller
         $query = Formulario::query()->with('questoes');
 
         if ($nomeFormulario) {
-            $query->where('nome_formulario', 'ilike', $nomeFormulario . '%');
+            $query->where('nome_formulario', 'ilike', '%' . $nomeFormulario . '%');
         }
 
         if ($status) {

@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>
-                    Formalários
+                    Formulários
                     <i class="bi bi-receipt"></i>
                 </h2>
 
@@ -69,6 +69,7 @@
                         <th>Nome</th>
                         <th>Qtd. Questões</th>
                         <th>Status</th>
+                        <th>Anonimo</th>
                         <th>Criado em</th>
                         <th>Ações</th>
                     </tr>
@@ -80,6 +81,7 @@
                             <td class="long-title">{{ $formulario->nome_formulario }}</td>
                             <td class="text-center">{{ $formulario->questoes->count() }}</td>
                             <td class="text-center">{{ $formulario->status }}</td>
+                            <td class="text-center">{{ $formulario->anonimo ? 'Sim' : 'Não'}}</td>
                             <td class="text-center">{{ $formulario->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
                                 <div class="d-flex gap-1 align-items-center justify-content-evenly flex-sm-wrap">

@@ -24,7 +24,17 @@
         </div>
     </div>
 
-    <div class="row pt-4">
+    @if($formulario->anonimo)
+        <div class="row pt-2">
+            <div class="col-md-12">
+                <div class="alert alert-warning" role="alert">
+                    Este formulário é anônimo.
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div class="row">
         <div class="col-md-12">
             @if ($formulario->questoes->isEmpty())
                 <div class="alert alert-warning" role="alert">
