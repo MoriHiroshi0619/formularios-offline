@@ -76,17 +76,20 @@
                     Status: {{ $formulario->status }}
                 </h4>
 
-                @if( !$formulario->isFinalizado() )
-                    <button class="btn btn-primary" type="button" data-action="mudar-status" data-status="{{ $formulario->status }}">
-                        @if( $formulario->isCriado() )
-                            <i class="bi bi-unlock"></i>
-                            Liberar
-                        @elseif( $formulario->isLiberado() )
-                            <i class="bi bi-lock"></i>
-                            Finalizar
-                        @endif
-                    </button>
-                @endif
+
+                <button class="btn btn-primary" type="button" data-action="mudar-status" data-status="{{ $formulario->status }}">
+                    @if( $formulario->isCriado() )
+                        <i class="bi bi-unlock"></i>
+                        Liberar
+                    @elseif( $formulario->isLiberado() )
+                        <i class="bi bi-lock"></i>
+                        Finalizar
+                    @elseif( $formulario->isFinalizado() )
+                        <i class="bi bi-unlock"></i>
+                        Liberar novamente
+                    @endif
+                </button>
+
             </div>
         </div>
     </div>
@@ -123,8 +126,28 @@
 
             $('[data-action="mudar-status"]').on('click', async (e) => {
                 let status = $(e.target).closest('button').data('status');
-                let novoStatus = status === 'CRIADO' ? 'LIBERADO' : 'FINALIZADO';
-                let texto = status === 'CRIADO' ? 'Liberar' : 'Finalizar';
+                let novoStatus = '';
+                switch (status){
+                    case 'CRIADO':
+                        novoStatus = 'LIBERADO';
+                        break;
+                    case 'LIBERADO':
+                        novoStatus = 'FINALIZADO';
+                        break;
+                    case 'FINALIZADO':
+                        novoStatus = 'LIBERADO';
+                        break;
+                    default:
+                        break;
+                }
+                let texto = ''
+                if(status === 'FINALIZADO'){
+                    texto = 'liberar novamente';
+                } else if(status === 'LIBERADO'){
+                    texto = 'finalizar';
+                } else if(status === 'CRIADO'){
+                    texto = 'liberar';
+                }
 
                 Swal.fire({
                     title: "Atenção!",
