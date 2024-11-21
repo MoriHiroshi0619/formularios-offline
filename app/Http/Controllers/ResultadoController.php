@@ -52,6 +52,43 @@ class ResultadoController extends Controller
         return view('Resultados.aluno-show', compact('formulario', 'respostaAluno'));
     }
 
+    public function exibirRelatorioEstatistico(Request $request, $formularioId)
+    {
+        $formulario = Formulario::with('questoes.opcoesMultiplasEscolhas')->findOrFail($formularioId);
+        $respostas = FormularioResposta::with('respostas')->where('formulario_id', $formularioId)->get();
+
+        $estatisticas = [];
+        $respostasTexto = [];
+
+        foreach ($formulario->questoes as $questao) {
+            if ($questao->tipo === 'MULTIPLA_ESCOLHA') {
+                foreach ($questao->opcoesMultiplasEscolhas as $opcao) {
+                    $estatisticas[$questao->id][$opcao->id] = [
+                        'opcao_resposta' => $opcao->opcao_resposta,
+                        'quantidade' => 0,
+                    ];
+                }
+            } elseif ($questao->tipo === 'TEXTO_LIVRE') {
+                $respostasTexto[$questao->id] = [];
+            }
+        }
+
+        foreach ($respostas as $resposta) {
+            foreach ($resposta->respostas as $respostaQuestao) {
+                if ($respostaQuestao->questao->tipo === FormularioQuestao::MULTIPLA_ESCOLHA) {
+                    if (isset($estatisticas[$respostaQuestao->questao_id][$respostaQuestao->resposta_id])) {
+                        $estatisticas[$respostaQuestao->questao_id][$respostaQuestao->resposta_id]['quantidade']++;
+                    }
+                } elseif ($respostaQuestao->questao->tipo === FormularioQuestao::TEXTO_LIVRE) {
+                    $respostasTexto[$respostaQuestao->questao_id][] = $respostaQuestao->resposta;
+                }
+            }
+        }
+
+        return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto'));
+    }
+
+
     public function gerarPDF($formularioId, $respostaAlunoId)
     {
         $formulario = Formulario::with('questoes')->findOrFail($formularioId);

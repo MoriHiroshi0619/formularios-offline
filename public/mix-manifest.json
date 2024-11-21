@@ -3,5 +3,7 @@
     "/js/functions.js": "/js/functions.js?id=7b2954f69f9e56d9cdd5cfbd89ac15e2",
     "/css/app.css": "/css/app.css?id=2f803834fccb0074c0575b8cbfc7320d",
     "/css/fonts.css": "/css/fonts.css?id=b066b1d41f998dbccf55e54f49b2e408",
-    "/css/projeto.css": "/css/projeto.css?id=eafba43b27ace8a6ab51cf03e800900e"
+    "/css/projeto.css": "/css/projeto.css?id=eafba43b27ace8a6ab51cf03e800900e",
+    "/js/chart.js": "/js/chart.js?id=c8c4c4f1daee10974095e5381b4e7aa2",
+    "/js/chartjs-plugin-datalabels.js": "/js/chartjs-plugin-datalabels.js?id=ac36db8fc4d8e46b0b8462788bd9e012"
 }
