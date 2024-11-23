@@ -89,7 +89,7 @@ class ResultadoController extends Controller
                     $palavras = str_word_count(strtolower(strip_tags($respostaQuestao->resposta)), 1);
                     foreach ($palavras as $palavra) {
                         // Remover palavras comuns (stop words)
-                        if (in_array($palavra, ['de', 'a', 'e', 'o', 'que', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'não'])) {
+                        if (in_array($palavra, ['de', 'a', 'e', 'o', 'que', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'es', 'no', 'na', 'os', 'as', 'dos', 'das', 'ou', 'se', 'por', 'como', 'mas', 'foi', 'ao', 'ele', 'das', 'tem', 'à', 'mais', 'quando', 'muito', 'nos', 'já', 'eu', 'sua', 'são', 'também', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'era', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'está', 'você', 'tinha', 'foram', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 'minha', 'têm', 'numa', 'pelos', 'elas', 'havia', 'seja', 'qual', 'será', 'nós', 'tenho', 'lhe', 'deles', 'essas', 'esses', 'pelas', 'este', 'fosse', 'dele', 'tu', 'te', 'vocês', 'vos', 'lhes', 'meus', 'minhas', 'teu', 'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 'dela', 'delas', 'esta', 'estes', 'estas', 'aquele', 'aquela', 'aqueles', 'aquelas', 'isto', 'aquilo', 'estou', 'está', 'estamos', 'estão', 'estive', 'esteve', 'estivemos', 'estiveram', 'estava', 'estávamos', 'estavam', 'estivera', 'estivéramos', 'esteja', 'estejamos', 'estejam', 'estivesse', 'estivéssemos', 'estivessem', 'estiver', 'estivermos', 'estiverem', 'hei', 'há', 'havemos', 'hão', 'houve', 'houvemos', 'houveram', 'h'])) {
                             continue;
                         }
                         // Contar as palavras
@@ -103,9 +103,18 @@ class ResultadoController extends Controller
             }
         }
 
-        // Ordenar as palavras por frequência
+        // Filtrar palavras com menos de 2 ocorrências e ordenar por frequência
         foreach ($nuvemPalavras as $questaoId => $palavras) {
-            arsort($nuvemPalavras[$questaoId]);
+            // Filtrar palavras com menos de 2 ocorrências
+            $palavrasFiltradas = array_filter($palavras, function($count) {
+                return $count >= 2;
+            });
+
+            // Ordenar as palavras por frequência
+            arsort($palavrasFiltradas);
+
+            // Atualizar o array de palavras da questão com as palavras filtradas e ordenadas
+            $nuvemPalavras[$questaoId] = $palavrasFiltradas;
         }
 
         return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto', 'nuvemPalavras'));
