@@ -58,6 +58,36 @@ class ResultadoController extends Controller
         $formulario = Formulario::with('questoes.opcoesMultiplasEscolhas')->findOrFail($formularioId);
         $respostas = FormularioResposta::with('respostas.questao', 'respostas.resposta')->where('formulario_id', $formularioId)->get();
 
+        $overview = [];
+
+        Carbon::setLocale('pt_BR');
+
+        // Detalhes do Formulário
+        $overview['nome_formulario'] = $formulario->nome_formulario;
+        $overview['data_criacao'] = $formulario->created_at;
+        $overview['data_ultima_liberacao'] = $formulario->liberado_em;
+        $overview['data_ultimo_encerramento'] = $formulario->finalizado_em;
+        $overview['anonimo'] = $formulario->anonimo;
+
+        // Duração Ativa
+        $inicio = $formulario->created_at;
+        $fim = $formulario->finalizado_em ?? now();
+
+        $overview['duracao_ativa'] = $inicio->diffForHumans($fim, [
+            'parts' => 3,
+            'syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE,
+        ]);
+
+        // Estatísticas de Respostas
+        $overview['total_respostas'] = $respostas->count();
+        $overview['data_primeira_resposta'] = $respostas->min('created_at');
+        $overview['data_ultima_resposta'] = $respostas->max('created_at');
+
+        // Estatísticas de Questões
+        $overview['total_questoes'] = $formulario->questoes->count();
+        $overview['questoes_multipla_escolha'] = $formulario->questoes->where('tipo', FormularioQuestao::MULTIPLA_ESCOLHA)->count();
+        $overview['questoes_texto_livre'] = $formulario->questoes->where('tipo', FormularioQuestao::TEXTO_LIVRE)->count();
+
         $estatisticas = [];
         $respostasTexto = [];
         $nuvemPalavras = [];
@@ -117,7 +147,7 @@ class ResultadoController extends Controller
             $nuvemPalavras[$questaoId] = $palavrasFiltradas;
         }
 
-        return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto', 'nuvemPalavras'));
+        return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto', 'nuvemPalavras', 'overview'));
     }
 
 
