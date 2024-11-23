@@ -33,6 +33,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nome do Formulário</th>
+                        <th>Qtd. pessoas participaram</th>
                         <th>Criado em</th>
                         <th>Ações</th>
                     </tr>
@@ -42,11 +43,17 @@
                         <tr>
                             <td class="text-center">{{ $formulario->id }}</td>
                             <td class="long-title">{{ $formulario->nome_formulario ?? 'Anônimo' }}</td>
+                            <td class="text-center">{{ $formulario->respostas->count() }}</td>
                             <td class="text-center">{{ $formulario->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
-                                <a href="{{ route('resultado.show', $formulario->id) }}" class="btn btn-primary btn-sm" title="Ver Resultados">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+                                <div class="d-flex gap-1 align-items-center justify-content-evenly flex-sm-wrap">
+                                    <a href="{{ route('resultado.show', $formulario->id) }}" class="btn btn-primary btn-sm" title="Ver Resultados">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('resultado.estatisticas', $formulario->id) }}" class="btn btn-success btn-sm" title="Ver estatística">
+                                        <i class="bi bi-bar-chart"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

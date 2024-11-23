@@ -16,13 +16,13 @@ class VisitanteFormularioController extends Controller
 {
     public function index(Request $request)
     {
-        $formulariosRespondidos = json_decode($request->cookie('formularios_respondidos', '[]'), true);
+        //$formulariosRespondidos = json_decode($request->cookie('formularios_respondidos', '[]'), true);
 
         $formularios = Formulario::query()
             ->where('status', Formulario::LIBERADO)
-            ->when($formulariosRespondidos, fn ($query, $formulariosRespondidos) =>
+            /*->when($formulariosRespondidos, fn ($query, $formulariosRespondidos) =>
                 $query->whereNotIn('id', $formulariosRespondidos)
-            )
+            )*/
             ->with('professor')
             ->paginate(10);
 
@@ -33,27 +33,33 @@ class VisitanteFormularioController extends Controller
     {
         try {
             DB::beginTransaction();
-            $formularioID = $request->input('formulario');
-            $respostas = session()->get('respostas', []);
 
-            if(!data_get($respostas, $formularioID)) throw new \Exception('Não foi possível verificar as respostas');
+            $dados = $request->all();
+
+            $formularioID = $dados['formulario'] ?? null;
+            $respostas = $dados['respostas'] ?? [];
+
+            if (!$formularioID || empty($respostas)) {
+                throw new \Exception('Dados incompletos.');
+            }
 
             $formulario = Formulario::query()
                 ->where('id', $formularioID)
                 ->where('status', Formulario::LIBERADO)
                 ->firstOrFail();
 
-            $nome = data_get($respostas, $formularioID.'.nome', $request->input('aluno'));
+            $nome = $formulario->anonimo ? null : ($dados['aluno'] ?? null);
+
+            if (!$formulario->anonimo && !$nome) {
+                throw new \Exception('Nome do aluno não informado.');
+            }
 
             $formularioResposta = new FormularioResposta();
             $formularioResposta->fill(['nome_aluno' => $nome]);
             $formularioResposta->formulario()->associate($formulario);
             $formularioResposta->save();
 
-            collect($respostas[$formularioID])->each(function ($resposta, $questaoId) use ($formularioResposta) {
-                if ($questaoId === 'nome') return null;
-                else if (is_string($questaoId)) return null;
-
+            foreach ($respostas as $questaoId => $resposta) {
                 $respostaModel = new Resposta();
                 $respostaModel->questao()->associate($questaoId);
                 $respostaModel->formularioResposta()->associate($formularioResposta);
@@ -62,24 +68,21 @@ class VisitanteFormularioController extends Controller
                 if ($tipo === FormularioQuestao::TEXTO_LIVRE) {
                     $respostaModel->fill(['resposta' => $resposta]);
                 } else {
-                    $opcaoMultiplaEscolha =  MultiplaEscolha::query()->where('id', $resposta)->first();
+                    $opcaoMultiplaEscolha = MultiplaEscolha::query()->where('id', $resposta)->first();
+                    if (!$opcaoMultiplaEscolha) {
+                        throw new \Exception('Opção de múltipla escolha inválida.');
+                    }
                     $respostaModel->resposta()->associate($opcaoMultiplaEscolha);
                 }
                 $respostaModel->save();
-            });
-
-            $formulariosRespondidos = json_decode($request->cookie('formularios_respondidos', '[]'), true);
-            $formulariosRespondidos[] = $formularioID;
+            }
 
             DB::commit();
-
-            session()->forget('respostas.' . $formularioID);
             session()->flash('success', 'Formulário enviado com sucesso');
-
-            return response()->noContent()->cookie('formularios_respondidos', json_encode($formulariosRespondidos), 60 * 24 * 30);
+            return response()->noContent();
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => 'Erro ao tentar enviar o formulário'], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
@@ -88,12 +91,12 @@ class VisitanteFormularioController extends Controller
         $formulario = Formulario::query()
             ->where('id', $formularioId)
             ->where('status', Formulario::LIBERADO)
-            ->with('questoes.opcoesMultiplasEscolhas')
+            ->with(['questoes.opcoesMultiplasEscolhas'])
             ->firstOrFail();
 
-        $questoes = $formulario->questoes()->paginate(1);
+        $questoes = $formulario->questoes()->get();
 
-        return view('Visitantes.realizar-formulario', compact('formulario', 'questoes'));
+        return view('Visitantes.realizar-formulario-sem-paginar', compact('formulario', 'questoes'));
     }
 
     public function salvarRespostasNaSessao(Request $request, $formularioId)

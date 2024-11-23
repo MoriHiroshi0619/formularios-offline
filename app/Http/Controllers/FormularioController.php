@@ -159,10 +159,6 @@ class FormularioController extends Controller
     public function liberarFormulario($formularioId)
     {
         $formulario = Formulario::query()->findOrFail($formularioId);
-        if($formulario->isFinalizado()){
-            session()->flash('error', 'Formulário já finalizado!');
-            return response()->json(['error' => 'Formulário já finalizado!'], 400);
-        }
         $formulario->status = Formulario::LIBERADO;
         $formulario->liberado_em = now();
         $formulario->save();
@@ -173,10 +169,6 @@ class FormularioController extends Controller
     public function encerrarFormulario($formularioId)
     {
         $formulario = Formulario::query()->findOrFail($formularioId);
-        if($formulario->isFinalizado()){
-            session()->flash('error', 'Formulário já finalizado!');
-            return response()->json(['error' => 'Formulário já finalizado!'], 400);
-        }
         $formulario->status = Formulario::FINALIZADO;
         $formulario->finalizado_em = now();
         $formulario->save();

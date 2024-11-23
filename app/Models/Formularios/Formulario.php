@@ -22,6 +22,13 @@ class Formulario extends Model
         'anonimo'
     ];
 
+    protected $casts = [
+        'liberado_em' => 'datetime',
+        'finalizado_em' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     const string CRIADO = "CRIADO";
     const string LIBERADO = "LIBERADO";
     const string FINALIZADO = "FINALIZADO";
