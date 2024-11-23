@@ -6,6 +6,7 @@ use App\Models\Formularios\Formulario;
 use App\Models\Formularios\FormularioQuestao;
 use App\Models\Respostas\FormularioResposta;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -55,13 +56,28 @@ class ResultadoController extends Controller
 
     public function exibirRelatorioEstatistico(Request $request, $formularioId)
     {
-        $formulario = Formulario::with('questoes.opcoesMultiplasEscolhas')->findOrFail($formularioId);
-        $respostas = FormularioResposta::with('respostas.questao', 'respostas.resposta')->where('formulario_id', $formularioId)->get();
-
-        $overview = [];
-
+        // Configurar o locale para português
         Carbon::setLocale('pt_BR');
 
+        $formulario = Formulario::with('questoes.opcoesMultiplasEscolhas')->findOrFail($formularioId);
+        $respostas = FormularioResposta::with('respostas.questao', 'respostas.resposta')
+            ->where('formulario_id', $formularioId)
+            ->get();
+
+        // Gerar dados para a visão geral
+        $overview = $this->generateOverview($formulario, $respostas);
+
+        // Processar estatísticas das questões
+        [$estatisticas, $respostasTexto] = $this->processarEstatisticasQuestoes($formulario, $respostas);
+
+        // Gerar nuvem de palavras
+        $nuvemPalavras = $this->gerarNuvemDePalavras($respostasTexto);
+
+        return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto', 'nuvemPalavras', 'overview'));
+    }
+
+    private function generateOverview(Formulario $formulario, $respostas)
+    {
         // Detalhes do Formulário
         $overview['nome_formulario'] = $formulario->nome_formulario;
         $overview['data_criacao'] = $formulario->created_at;
@@ -75,7 +91,7 @@ class ResultadoController extends Controller
 
         $overview['duracao_ativa'] = $inicio->diffForHumans($fim, [
             'parts' => 3,
-            'syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE,
+            'syntax' => Carbon::DIFF_ABSOLUTE,
         ]);
 
         // Estatísticas de Respostas
@@ -88,10 +104,15 @@ class ResultadoController extends Controller
         $overview['questoes_multipla_escolha'] = $formulario->questoes->where('tipo', FormularioQuestao::MULTIPLA_ESCOLHA)->count();
         $overview['questoes_texto_livre'] = $formulario->questoes->where('tipo', FormularioQuestao::TEXTO_LIVRE)->count();
 
+        return $overview;
+    }
+
+    private function processarEstatisticasQuestoes(Formulario $formulario, $respostas)
+    {
         $estatisticas = [];
         $respostasTexto = [];
-        $nuvemPalavras = [];
 
+        // Inicializa os arrays de estatísticas
         foreach ($formulario->questoes as $questao) {
             if ($questao->tipo === FormularioQuestao::MULTIPLA_ESCOLHA) {
                 foreach ($questao->opcoesMultiplasEscolhas as $opcao) {
@@ -102,10 +123,10 @@ class ResultadoController extends Controller
                 }
             } elseif ($questao->tipo === FormularioQuestao::TEXTO_LIVRE) {
                 $respostasTexto[$questao->id] = [];
-                $nuvemPalavras[$questao->id] = [];
             }
         }
 
+        // Processa as respostas
         foreach ($respostas as $resposta) {
             foreach ($resposta->respostas as $respostaQuestao) {
                 if ($respostaQuestao->questao->tipo === FormularioQuestao::MULTIPLA_ESCOLHA) {
@@ -114,40 +135,49 @@ class ResultadoController extends Controller
                     }
                 } elseif ($respostaQuestao->questao->tipo === FormularioQuestao::TEXTO_LIVRE) {
                     $respostasTexto[$respostaQuestao->questao_id][] = $respostaQuestao->resposta;
-
-                    // Processar as palavras para a nuvem de palavras
-                    $palavras = str_word_count(strtolower(strip_tags($respostaQuestao->resposta)), 1);
-                    foreach ($palavras as $palavra) {
-                        // Remover palavras comuns (stop words)
-                        if (in_array($palavra, ['de', 'a', 'e', 'o', 'que', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'es', 'no', 'na', 'os', 'as', 'dos', 'das', 'ou', 'se', 'por', 'como', 'mas', 'foi', 'ao', 'ele', 'das', 'tem', 'à', 'mais', 'quando', 'muito', 'nos', 'já', 'eu', 'sua', 'são', 'também', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'era', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'está', 'você', 'tinha', 'foram', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 'minha', 'têm', 'numa', 'pelos', 'elas', 'havia', 'seja', 'qual', 'será', 'nós', 'tenho', 'lhe', 'deles', 'essas', 'esses', 'pelas', 'este', 'fosse', 'dele', 'tu', 'te', 'vocês', 'vos', 'lhes', 'meus', 'minhas', 'teu', 'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 'dela', 'delas', 'esta', 'estes', 'estas', 'aquele', 'aquela', 'aqueles', 'aquelas', 'isto', 'aquilo', 'estou', 'está', 'estamos', 'estão', 'estive', 'esteve', 'estivemos', 'estiveram', 'estava', 'estávamos', 'estavam', 'estivera', 'estivéramos', 'esteja', 'estejamos', 'estejam', 'estivesse', 'estivéssemos', 'estivessem', 'estiver', 'estivermos', 'estiverem', 'hei', 'há', 'havemos', 'hão', 'houve', 'houvemos', 'houveram', 'h'])) {
-                            continue;
-                        }
-                        // Contar as palavras
-                        if (isset($nuvemPalavras[$respostaQuestao->questao_id][$palavra])) {
-                            $nuvemPalavras[$respostaQuestao->questao_id][$palavra]++;
-                        } else {
-                            $nuvemPalavras[$respostaQuestao->questao_id][$palavra] = 1;
-                        }
-                    }
                 }
             }
         }
 
-        // Filtrar palavras com menos de 2 ocorrências e ordenar por frequência
-        foreach ($nuvemPalavras as $questaoId => $palavras) {
-            // Filtrar palavras com menos de 2 ocorrências
-            $palavrasFiltradas = array_filter($palavras, function($count) {
+        return [$estatisticas, $respostasTexto];
+    }
+
+    private function gerarNuvemDePalavras(array $respostasTexto)
+    {
+        $nuvemPalavras = [];
+        $stopWords = ['de', 'a', 'e', 'o', 'que', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'es', 'no', 'na', 'os', 'as', 'dos', 'das', 'ou', 'se', 'por', 'como', 'mas', 'foi', 'ao', 'ele', 'das', 'tem', 'à', 'mais', 'quando', 'muito', 'nos', 'já', 'eu', 'sua', 'são', 'também', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'era', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'está', 'você', 'tinha', 'foram', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 'minha', 'têm', 'numa', 'pelos', 'elas', 'havia', 'seja', 'qual', 'será', 'nós', 'tenho', 'lhe', 'deles', 'essas', 'esses', 'pelas', 'este', 'fosse', 'dele', 'tu', 'te', 'vocês', 'vos', 'lhes', 'meus', 'minhas', 'teu', 'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 'dela', 'delas', 'esta', 'estes', 'estas', 'aquele', 'aquela', 'aqueles', 'aquelas', 'isto', 'aquilo', 'estou', 'está', 'estamos', 'estão', 'estive', 'esteve', 'estivemos', 'estiveram', 'estava', 'estávamos', 'estavam', 'estivera', 'estivéramos', 'esteja', 'estejamos', 'estejam', 'estivesse', 'estivéssemos', 'estivessem', 'estiver', 'estivermos', 'estiverem', 'hei', 'há', 'havemos', 'hão', 'houve', 'houvemos', 'houveram', 'h'];
+
+        foreach ($respostasTexto as $questaoId => $respostas) {
+            $nuvemPalavras[$questaoId] = [];
+
+            foreach ($respostas as $resposta) {
+                // Processar as palavras
+                $palavras = str_word_count(strtolower(strip_tags($resposta)), 1);
+                foreach ($palavras as $palavra) {
+                    // Remover palavras comuns (stop words)
+                    if (in_array($palavra, $stopWords)) {
+                        continue;
+                    }
+                    // Contar as palavras
+                    if (isset($nuvemPalavras[$questaoId][$palavra])) {
+                        $nuvemPalavras[$questaoId][$palavra]++;
+                    } else {
+                        $nuvemPalavras[$questaoId][$palavra] = 1;
+                    }
+                }
+            }
+
+            // Filtrar palavras com menos de 2 ocorrências e ordenar por frequência
+            $palavrasFiltradas = array_filter($nuvemPalavras[$questaoId], function($count) {
                 return $count >= 2;
             });
 
-            // Ordenar as palavras por frequência
             arsort($palavrasFiltradas);
 
-            // Atualizar o array de palavras da questão com as palavras filtradas e ordenadas
             $nuvemPalavras[$questaoId] = $palavrasFiltradas;
         }
 
-        return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto', 'nuvemPalavras', 'overview'));
+        return $nuvemPalavras;
     }
 
 
