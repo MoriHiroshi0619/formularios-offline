@@ -5,5 +5,6 @@
     "/css/fonts.css": "/css/fonts.css?id=b066b1d41f998dbccf55e54f49b2e408",
     "/css/projeto.css": "/css/projeto.css?id=eafba43b27ace8a6ab51cf03e800900e",
     "/js/chart.js": "/js/chart.js?id=c8c4c4f1daee10974095e5381b4e7aa2",
-    "/js/chartjs-plugin-datalabels.js": "/js/chartjs-plugin-datalabels.js?id=ac36db8fc4d8e46b0b8462788bd9e012"
+    "/js/chartjs-plugin-datalabels.js": "/js/chartjs-plugin-datalabels.js?id=ac36db8fc4d8e46b0b8462788bd9e012",
+    "/js/wordcloud2.js": "/js/wordcloud2.js?id=10ae0f29c2fbbfe681024707816e1e64"
 }

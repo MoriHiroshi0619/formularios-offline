@@ -7,6 +7,7 @@ use App\Models\Formularios\FormularioQuestao;
 use App\Models\Respostas\FormularioResposta;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 
 class ResultadoController extends Controller
@@ -55,21 +56,23 @@ class ResultadoController extends Controller
     public function exibirRelatorioEstatistico(Request $request, $formularioId)
     {
         $formulario = Formulario::with('questoes.opcoesMultiplasEscolhas')->findOrFail($formularioId);
-        $respostas = FormularioResposta::with('respostas')->where('formulario_id', $formularioId)->get();
+        $respostas = FormularioResposta::with('respostas.questao', 'respostas.resposta')->where('formulario_id', $formularioId)->get();
 
         $estatisticas = [];
         $respostasTexto = [];
+        $nuvemPalavras = [];
 
         foreach ($formulario->questoes as $questao) {
-            if ($questao->tipo === 'MULTIPLA_ESCOLHA') {
+            if ($questao->tipo === FormularioQuestao::MULTIPLA_ESCOLHA) {
                 foreach ($questao->opcoesMultiplasEscolhas as $opcao) {
                     $estatisticas[$questao->id][$opcao->id] = [
                         'opcao_resposta' => $opcao->opcao_resposta,
                         'quantidade' => 0,
                     ];
                 }
-            } elseif ($questao->tipo === 'TEXTO_LIVRE') {
+            } elseif ($questao->tipo === FormularioQuestao::TEXTO_LIVRE) {
                 $respostasTexto[$questao->id] = [];
+                $nuvemPalavras[$questao->id] = [];
             }
         }
 
@@ -81,11 +84,31 @@ class ResultadoController extends Controller
                     }
                 } elseif ($respostaQuestao->questao->tipo === FormularioQuestao::TEXTO_LIVRE) {
                     $respostasTexto[$respostaQuestao->questao_id][] = $respostaQuestao->resposta;
+
+                    // Processar as palavras para a nuvem de palavras
+                    $palavras = str_word_count(strtolower(strip_tags($respostaQuestao->resposta)), 1);
+                    foreach ($palavras as $palavra) {
+                        // Remover palavras comuns (stop words)
+                        if (in_array($palavra, ['de', 'a', 'e', 'o', 'que', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'não'])) {
+                            continue;
+                        }
+                        // Contar as palavras
+                        if (isset($nuvemPalavras[$respostaQuestao->questao_id][$palavra])) {
+                            $nuvemPalavras[$respostaQuestao->questao_id][$palavra]++;
+                        } else {
+                            $nuvemPalavras[$respostaQuestao->questao_id][$palavra] = 1;
+                        }
+                    }
                 }
             }
         }
 
-        return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto'));
+        // Ordenar as palavras por frequência
+        foreach ($nuvemPalavras as $questaoId => $palavras) {
+            arsort($nuvemPalavras[$questaoId]);
+        }
+
+        return view('Resultados.estatisticas', compact('formulario', 'estatisticas', 'respostasTexto', 'nuvemPalavras'));
     }
 
 
