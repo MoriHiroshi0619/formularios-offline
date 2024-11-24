@@ -2,6 +2,14 @@
 
 @section('content')
     <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">home</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('resultado.index') }}">Resultados</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Resultados - Estatístico</li>
+            </ol>
+        </nav>
+
         <h2>Resultados Estatísticos do Formulário: {{ $formulario->nome_formulario }}</h2>
 
         <div class="card mb-4">
