@@ -51,7 +51,7 @@ Siga os passos abaixo para instalar o projeto localmente usando Docker:
     docker compose up --build -d
    
 4. Instale as dependências do PHP e do Node.js:
-   Dependências do PHP
+   <br/>Dependências do PHP
    ```bash
    docker compose exec app composer install
    ```
@@ -100,12 +100,16 @@ Sempre que for utilizar a aplicação, será necessario executar os seguintes co
 - Volumes Persistentes: Os dados do banco de dados são persistidos usando volumes do Docker, garantindo que as informações não sejam perdidas ao reiniciar os contêineres.
 
 #### Comandos Úteis:
-1. Acessar o contêiner do aplicativo:
+1. Acessar o contêiner do Laravel:
    ```bash
    docker compose exec laravel_app bash
 2. Visualizar logs:
    ```bash
-   docker compose logs -f 
+   docker compose logs -f
+3. Resetar senha de acesso caso tenha esquecido
+```bash
+docker compose exec app php artisan user:reset-password
+```
 
 #### Projeto desenvolvido como parte de uma iniciativa acadêmica da Universidade Estadual de Mato Grosso do Sul (UEMS)
 
