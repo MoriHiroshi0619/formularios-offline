@@ -48,9 +48,15 @@
                     <i class="bi bi-person-plus"></i>
                     Cadastrar
                 </a>--}}
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    Entrar
+                <button type="submit" class="btn btn-primary" data-action="entrar">
+                    <div class="div-entrar">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Entrar
+                    </div>
+                    <div class="d-none d-flex justify-content-center align-items-center gap-2 div-carregar-entrar">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Entrando...
+                    </div>
                 </button>
             </div>
         </form>
@@ -60,6 +66,25 @@
 
 @push('scripts')
     <script type="application/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form[action="{{ route('login.login') }}"]');
+            const submitButton = form.querySelector('button[data-action="entrar"]');
+
+            form.addEventListener('submit', () => {
+                submitButton.setAttribute('disabled', 'disabled');
+                submitButton.querySelector('.div-entrar').classList.add('d-none');
+                submitButton.querySelector('.div-carregar-entrar').classList.remove('d-none');
+            });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    submitButton.removeAttribute('disabled');
+                    submitButton.querySelector('.div-entrar').classList.remove('d-none');
+                    submitButton.querySelector('.div-carregar-entrar').classList.add('d-none');
+                }
+            });
+        });
+
         $(document).ready(()=>{
             $('[data-action="alterar-senha-visibilidade"]').on('click', (e)=> {
                 let inputSenha = $('#senha');
