@@ -69,6 +69,21 @@
         </div>
     </div>
 
+    @php
+        $buttonIcon = '';
+        $buttonText = '';
+        if( $formulario->isCriado() ) {
+            $buttonIcon = 'bi-unlock';
+            $buttonText = 'Liberar';
+        } elseif( $formulario->isLiberado() ) {
+            $buttonIcon = 'bi-lock';
+            $buttonText = 'Finalizar';
+        } elseif( $formulario->isFinalizado() ) {
+            $buttonIcon = 'bi-unlock';
+            $buttonText = 'Liberar novamente';
+        }
+    @endphp
+
     <div class="row pt-2">
         <div class="col-md-12">
             <div class="d-flex justify-content-end gap-2 align-items-sm-center flex-wrap">
@@ -76,23 +91,20 @@
                     Status: {{ $formulario->status }}
                 </h4>
 
-
                 <button class="btn btn-primary" type="button" data-action="mudar-status" data-status="{{ $formulario->status }}">
-                    @if( $formulario->isCriado() )
-                        <i class="bi bi-unlock"></i>
-                        Liberar
-                    @elseif( $formulario->isLiberado() )
-                        <i class="bi bi-lock"></i>
-                        Finalizar
-                    @elseif( $formulario->isFinalizado() )
-                        <i class="bi bi-unlock"></i>
-                        Liberar novamente
-                    @endif
+                    <div class="div-status">
+                        <i class="bi {{ $buttonIcon }}"></i>
+                        {{ $buttonText }}
+                    </div>
+                    <div class="d-none d-flex justify-content-center align-items-center gap-2 div-carregar-status">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Processando...
+                    </div>
                 </button>
-
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('scripts')
@@ -125,7 +137,8 @@
             })
 
             $('[data-action="mudar-status"]').on('click', async (e) => {
-                let status = $(e.target).closest('button').data('status');
+                let $button = $(e.target).closest('button');
+                let status = $button.data('status');
                 let novoStatus = '';
                 switch (status){
                     case 'CRIADO':
@@ -170,18 +183,28 @@
                             url = `/formulario/encerrar/{{ $formulario->id }}`;
                             break;
                     }
+
+                    $button.attr('disabled', 'disabled');
+                    $button.find('.div-status').addClass('d-none');
+                    $button.find('.div-carregar-status').removeClass('d-none');
+
                     try{
                         await axios.put(url, { status: novoStatus });
                         window.location.reload();
                     }catch (e) {
+                        $button.removeAttr('disabled');
+                        $button.find('.div-status').removeClass('d-none');
+                        $button.find('.div-carregar-status').addClass('d-none');
+
                         await Swal.fire({
                             icon: 'error',
                             title: 'Erro ao mudar status do formulário',
                             text: e.message
-                        })
+                        });
                     }
                 });
-            })
+            });
+
 
         })
     </script>

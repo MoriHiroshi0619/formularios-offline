@@ -128,7 +128,6 @@
                 return respostas;
             }
 
-            // Evento para enviar as respostas
             $('#submit').click(async (e) => {
                 e.preventDefault();
                 let respostas = capturarRespostas();
@@ -145,37 +144,44 @@
                 }
                 @endif
 
-                // Confirmação antes de enviar
-                let confirm = await Swal.fire({
+
+                await Swal.fire({
                     title: 'Confirmar Envio',
                     text: 'Você revisou suas respostas? Deseja enviar agora?',
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Sim, enviar',
-                    cancelButtonText: 'Cancelar'
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true,
+                    preConfirm: () => {
+                        Swal.showLoading();
+                        return axios.post('{{ route('visitantes.formularios.store') }}', respostas)
+                            .then(() => {
+                                Swal.close();
+                                $('#submit').attr('disabled', true);
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Formulário Enviado',
+                                    text: 'Suas respostas foram enviadas com sucesso!',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then(() => {
+                                    window.location.href = '{{ route('visitantes.formularios.index') }}';
+                                });
+                            })
+                            .catch((e) => {
+                                $('#submit').attr('disabled', false);
+                                Swal.hideLoading();
+                                Swal.showValidationMessage(
+                                    e.response.data.error || 'Erro desconhecido.'
+                                );
+                            });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
                 });
-
-                if (confirm.isConfirmed) {
-                    try {
-                        await axios.post('{{ route('visitantes.formularios.store') }}', respostas);
-                        await Swal.fire({
-                            icon: 'success',
-                            title: 'Formulário Enviado',
-                            text: 'Suas respostas foram enviadas com sucesso!',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                        window.location.href = '{{ route('visitantes.formularios.index') }}';
-                    } catch (e) {
-                        await Swal.fire({
-                            icon: 'error',
-                            title: 'Erro ao enviar',
-                            text: e.response.data.error || 'Erro desconhecido.',
-                            showConfirmButton: true,
-                        });
-                    }
-                }
             });
+
+
         });
     </script>
 @endpush

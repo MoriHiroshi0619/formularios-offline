@@ -2,6 +2,14 @@
 
 @section('content')
     <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">home</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('resultado.index') }}">Resultados</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Resultados - Estatístico</li>
+            </ol>
+        </nav>
+
         <h2>Resultados Estatísticos do Formulário: {{ $formulario->nome_formulario }}</h2>
 
         <div class="card mb-4">
@@ -45,12 +53,12 @@
                             <button type="button" class="btn btn-secondary" onclick="mostrarGrafico('bar', {{ $questao->id }})">Gráfico de Barras</button>
                             <button type="button" class="btn btn-secondary" onclick="mostrarGrafico('pie', {{ $questao->id }})">Gráfico de Pizza</button>
                         </div>
-                        <canvas id="chart-questao-{{ $questao->id }}"></canvas>
+                        <canvas id="chart-questao-{{ $questao->id }}" class="div-grafico"></canvas>
                     @elseif( $questao->tipo === \App\Models\Formularios\FormularioQuestao::TEXTO_LIVRE )
                         <h6 class="mt-3">Respostas:</h6>
                         <button type="button" class="btn btn-primary mb-3" onclick="toggleWordCloud({{ $questao->id }})">Mostrar/Ocultar Nuvem de Palavras</button>
                         <div id="word-cloud-container-{{ $questao->id }}" class="word-cloud-container collapsed">
-                            <div id="word-cloud-{{ $questao->id }}" style="width: 100%; height: 400px;"></div>
+                            <div id="word-cloud-{{ $questao->id }}" style="width: 100%; height: 300px;"></div>
                         </div>
                         <ul>
                             @foreach( $respostasTexto[$questao->id] as $resposta )
@@ -239,6 +247,10 @@
 
 @push('styles')
     <style>
+        .div-grafico {
+            height: 530px !important;
+            margin: auto !important;
+        }
         .word-cloud-container {
             border: 1px solid #ccc;
             border-radius: 10px;

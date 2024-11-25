@@ -134,6 +134,7 @@
 
             $('[data-action="deletar-formulario"]').on('click', (e) => {
                 let id = $(e.target).closest('button').data('id');
+
                 Swal.fire({
                     title: "Atenção!",
                     text: "Deseja mesmo apagar o formulário?",
@@ -143,24 +144,27 @@
                     cancelButtonText: "Cancelar",
                     confirmButtonColor: "#d33",
                     confirmButtonText: "Apagar!",
-                    reverseButtons: true
-                }).then( async (result) => {
-                    if (!result.isConfirmed) return;
-                    try{
-                        await axios.delete(`/formulario/${id}`);
-                        window.location.reload();
-                    }catch (e) {
-                        await Swal.fire({
-                            icon: 'error',
-                            title: 'Erro ao apagar formulário',
-                            text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
-                        })
-                    }
+                    reverseButtons: true,
+                    preConfirm: () => {
+                        Swal.showLoading();
+                        return axios.delete(`/formulario/${id}`)
+                            .then(() => {
+                                window.location.reload();
+                            })
+                            .catch((e) => {
+                                Swal.hideLoading();
+                                Swal.showValidationMessage(
+                                    `Erro ao apagar formulário: ${e.response.status} - ${e.response.statusText}`
+                                );
+                            });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
                 });
-            })
+            });
 
             $('[data-action="replicar-formulario"]').on('click', (e) => {
                 let id = $(e.target).closest('button').data('id');
+
                 Swal.fire({
                     title: "Replicar Formulário?",
                     html: "<span>Ao fazer isso, criará um novo formulário com as mesmas questões do formulário atual.</span>" +
@@ -171,21 +175,24 @@
                     cancelButtonText: "Cancelar",
                     confirmButtonColor: "#0e5e02",
                     confirmButtonText: "Replicar!",
-                    reverseButtons: true
-                }).then( async (result) => {
-                    if (!result.isConfirmed) return;
-                    try{
-                        await axios.post(`/formulario/replicar/${id}`);
-                        window.location.reload();
-                    }catch (e) {
-                        await Swal.fire({
-                            icon: 'error',
-                            title: 'Erro ao replicar formulário',
-                            text: 'status: ' + e.response.status + ' - ' + e.response.statusText,
-                        })
-                    }
+                    reverseButtons: true,
+                    preConfirm: () => {
+                        Swal.showLoading();
+                        return axios.post(`/formulario/replicar/${id}`)
+                            .then(() => {
+                                window.location.reload();
+                            })
+                            .catch((e) => {
+                                Swal.hideLoading();
+                                Swal.showValidationMessage(
+                                    `Erro ao replicar formulário: ${e.response.status} - ${e.response.statusText}`
+                                );
+                            });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
                 });
-            })
+            });
+
         })
     </script>
 @endpush
