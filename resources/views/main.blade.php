@@ -22,7 +22,8 @@
 
 </head>
 <body>
-    {{--header--}}
+    @inject('agent', 'Jenssegers\Agent\Agent')
+
     <header class="sticky-top">
         <nav class="navbar navbar-expand-sm py-3">
             <div class="container">
@@ -39,7 +40,6 @@
                                 <i class="bi bi-box-arrow-in-left"></i>
                                 Sair
                             </button>
-
                         </form>
                     @else
                         <div>
@@ -47,20 +47,21 @@
                                 Formulários Offline
                             </a>
                         </div>
-                        @if(request()->routeIs('visitantes.*'))
+
+                        @if( $agent->isDesktop() )
                             <div>
                                 <a href="{{ route('login.index') }}" class="btn btn-primary">
                                     <i class="bi bi-box-arrow-in-right"></i>
-                                        Entrar
+                                    Entrar
                                 </a>
                             </div>
                         @endif
-
-                   @endif
+                    @endif
                 </div>
             </div>
         </nav>
     </header>
+
 
     <main class="container">
         <div class="row pt-4">
