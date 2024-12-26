@@ -19,8 +19,12 @@ yarn-error.log
 public/img/.DS_Store
 public/css/app.css
 public/css/fonts.css
+public/css/projeto.css
 public/fonts/*
 public/js/app.js
 public/js/app.js.LICENSE.txt
+public/js/chart.js
+public/js/functions.js
+public/mix-manifest.json
 .DS_Store
 .env-local-hiroshi
